@@ -1,0 +1,5 @@
+Para compilar a GUI é necessária ter instalado biblioteca GTK.
+Instalando por terminal: $ sudo apt-get install libgtk2.0-dev
+Na compilação de testes é necessário ter instalo a biblioteca CUnit.
+Para compilar basta utilizar o makefile presente
+terminal: $ make
