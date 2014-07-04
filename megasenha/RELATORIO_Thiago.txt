@@ -1,0 +1,17 @@
+﻿|Data| Horas Trabalhadas|Tipo�Tarefa   |Descri��o�da�Tarefa�Realizada|
+-------------------------------------------------------------------
+|     |  2 horas        |Estudo dos    |Estudo da Gui e do                             |
+|26-04|                 |demais modulos|modulo de armazenamento                             |
+-------------------------------------------------------------------
+|     |    2 horas      |Especificar as|Analisei os requisitos                              |
+|26-04|                 |funcoes       |funcionais                |
+-------------------------------------------------------------------
+|27-04|     8 horas      | Codificar modulo  | Inicio da implementacao                            |
+|     |                  | controle          | dos modulos         |
+-------------------------------------------------------------------
+|     |                  |           |                             |
+|     |                  |           |                             |
+-------------------------------------------------------------------
+|     |                  |           |                             |
+|     |                  |           |                             |
+-------------------------------------------------------------------

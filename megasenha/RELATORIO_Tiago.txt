@@ -1,0 +1,47 @@
+|Data   | Horas Trabalhadas|Tipo Tarefa |Descrição da Tarefa Realizada      |
+-----------------------------------------------------------------------------
+|09/04  |     1:00         |Especificar |Estudei a divisao de tarefas em    |
+|       |                  |os modulos  |modulos                            |
+-----------------------------------------------------------------------------
+|09/04  |     1:00         |Estudar     |Estudei melhor biblioteca para GUI |
+|       |                  |GUI         |(GTK escolhida)                    |
+-----------------------------------------------------------------------------
+|11/04  |     1:00         |Especificar |Analisei o modulo GUI e comecei a  |
+|       |                  |as funcoes  |especificar suas funcoes           |
+-----------------------------------------------------------------------------
+|11/04  |     2:00         |Codificar   |Iniciei o modulo e interface GUI   |
+|       |                  |modulo GUI  |Criei o makefile e descobri como   |
+|       |                  |            |compilar biblioteca GTK            |
+-----------------------------------------------------------------------------
+|23/04  |     3:00         |Codificar   |Modifiquei GUI para nao travar o   |
+|       |                  |modulo GUI  |programa ao ser rodada             |
+-----------------------------------------------------------------------------
+|24/04  |     0:30         |Codificar   |Adicionei caixa de texto para input|
+|       |                  |modulo GUI  |da palavra desejada                |
+-----------------------------------------------------------------------------
+|24/05  |     2:00         |Codificar   |Separei icones na area de trabalho |
+|       |                  |modulo GUI  |dos dois jogadores                 |
+-----------------------------------------------------------------------------
+|25/05  |     7:36         |Codificar   |Criei interface para se enviar     |
+|       |                  |modulo GUI  |palavras e dicas, o timer, sistema |
+|       |                  |            |para fechar a interface, possibili-|
+|       |                  |            |dade de abrir uma ou duas janelas  |
+|       |                  |            |de jogo (1 e 2 fase)               |
+|       |                  |            |Mecanismo para se descobrir se o   |
+|       |                  |            |jogador estajogando ou acabou e    |
+|       |                  |            |pegar o numero de dicas usadas     |
+-----------------------------------------------------------------------------
+|25/05  |     2:00         |Codificar   |Acabei de comentar o codigo e      |
+|       |                  |modulo GUI  |corrigi alguns problemas detectados|
+-----------------------------------------------------------------------------
+|27/05  |     1:30         |Codificar   |Criei um exemplo de como utilizar  |
+|       |                  |exemplo     |as funcoes da GUI                  |
+-----------------------------------------------------------------------------
+|27/05  |     4:00         |Codificar   |Ajudei o Douglas a corrigir alguns |
+|       |                  |modulo Armaz|problemas no codigo de armazenament|
+-----------------------------------------------------------------------------
+|28/05  |     4:00         |Codificar   |Corrigi varios problemas presentes |
+|       |                  |modulo      |no modulo de controle do jogo      |
+|       |                  |Controle    |Melhorei o controle da segunda     |
+|       |                  |            |parte do jogo                      |
+-----------------------------------------------------------------------------

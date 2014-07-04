@@ -1,0 +1,17 @@
+|Data| Horas Trabalhadas|Tipo Tarefa  |Descrição da Tarefa Realizada|
+-------------------------------------------------------------------
+| 09/|       6h         | Estudar     |Estudar programação modular  |
+| 04 |                  |             |                             |
+-------------------------------------------------------------------
+| 22/|       1h         | Revisar     | Revisar especificações do   |
+| 04 |                  |especificação|trabalho 1                   |
+-------------------------------------------------------------------
+|25/ |       2h         |Projetar     | Projetar casos de testes    |
+| 04 |                  |             | pra gui                     |
+-------------------------------------------------------------------
+|26/ |       6h         |Redigir casos| Redigir casos de testes     |
+| 04 |                  |de testes    |     para gui                |
+-------------------------------------------------------------------
+|27/ |                  |Redigir casos| Redigir casos de testes     |
+| 04 |                  |de testes    |                             |
+-------------------------------------------------------------------

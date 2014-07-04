@@ -1,0 +1,21 @@
+|Data| Horas Trabalhadas|Tipo Tarefa |Descrição da Tarefa Realizada    |
+------------------------------------------------------------------------
+|    |     1:00         |especificar   |  especificação e divisão      |
+|09/4|                  |os modulos    |  dos modulos                  |
+------------------------------------------------------------------------
+|11/4|   2:00           |especificar   | especificação e definição     |
+|    |                  |as funções    |funções do modulo armazenamento|
+------------------------------------------------------------------------
+|23/4|  1:00            |revisar       | revisão das especificações das|
+|    |                  |especificações| funções e suas funcionalidades|
+------------------------------------------------------------------------
+|24/4|  8:00            |codificação do| implementação das funções     |
+|    |                  |m.armazenamento| pertecentes ao modulo        |
+------------------------------------------------------------------------
+|25/4|  8:00            |codicicação   |fim da codificação das funções |
+|    |                  |do modulo     |de leitura do arquivo de dicas |
+------------------------------------------------------------------------
+|27/4|  12:00           |revisão do    |revisão e correção de erro e   |
+|    |                  |modulo        |falhas pertencentes ao modulo  |
+|    |                  |              |        armazenamento.         |
+________________________________________________________________________
