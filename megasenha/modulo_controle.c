@@ -11,7 +11,7 @@ int iniciaPrimeiraFase(int *score) {
     int dicas[2]= {0,0} , i=0,j=0;
     int rodada = 0, playerVencedor=1, flag =0, inicial =1;
     char buf [150];
-    int playerTurn = 0; // zero for player 1 and 1 for player 2
+    int playerTurn = 0; /**< zero for player 1 and 1 for player 2.*/
     FILE *arquivo;
 
     if((arquivo = fopen("dicas_primeira_fase.txt","r")) == NULL)
@@ -33,9 +33,8 @@ int iniciaPrimeiraFase(int *score) {
                 break;
             }
         }
-        //wait(4);
-        // if player score is -1 he didn't get the answer else, it returns number of hints used
-        int playerScore = getPlayerScore(playerTurn+1);
+      
+        int playerScore = getPlayerScore(playerTurn+1);/**<if player score is -1 he didn't get the answer else, it returns number of hints used.*/
         if (playerScore != -1) {
             dicas[j]= dicas[j] + (4 - playerScore);
         } else {
@@ -44,7 +43,7 @@ int iniciaPrimeiraFase(int *score) {
 
         sprintf(buf, "Palavra numero %d\nPontuacao do jogador foi %d!", rodada+1, 4 - playerScore);
         updateInfoLabel (buf, "blue");
-        //printf("\na pontuacao e %d\n",(4-getPlayerScore(playerTurn+1)) );
+       
         playerTurn = !playerTurn;
         j =!j;
         rodada++;
@@ -116,8 +115,8 @@ void iniciaSegundaFase(int playerVencedor, int scoreFirstRound){
     int primeiraIteracao = 1, pntPlayer1=0,pntPlayer2=0;
     int dicas[2], i=0,j=0;
     char buf[150];
-    int etapa = 0;// playerVencedor=1;
-    int playerTurn = 0, flag = 0; // zero for player 1 and 1 for player 2
+    int etapa = 0;/**<playerVencedor=1.*/
+    int playerTurn = 0, flag = 0; /**< zero for player 1 and 1 for player 2.*/
     char resposta;
     int perdeu = 0;
     int pontosFinais[8] = {10, 100, 500, 1000, 5000, 10000, 500000, 1000000};
@@ -137,7 +136,7 @@ void iniciaSegundaFase(int playerVencedor, int scoreFirstRound){
     while (etapa<9 && flag==0) {
         while (updateInterface()) {
             if(!waitingPlayer()) {
-                //printf("Deseja parar e ganhar seus pontos?");
+                
                 etapa++;
 
                 if (etapa > 8) {
@@ -193,7 +192,7 @@ void iniciaSegundaFase(int playerVencedor, int scoreFirstRound){
             }
         }
 
-        //wait(2);
+       
     }
 
     closeInterface();
@@ -235,8 +234,7 @@ int startMainWindow(int argc, char *argv[]) {
     }
 
     closeMainWindow();
-  //  sleep(1);
-  //  updateMainInterface();
+
     
     return choice;
 }
