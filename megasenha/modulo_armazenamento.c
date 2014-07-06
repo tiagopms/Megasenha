@@ -19,9 +19,10 @@ typedef struct RankingStruct {
 
 char *RANKING_FILE = "ranking.txt";
 
-/////////////////////////////////////////////////////////////////////////////////
-/* function to randomly select words for the first part of the game */ 
 
+/**funtion void getWordFirstRound
+ * function to randomly select words for the first part of the game.
+*/
 void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     static alreadyRandom = 0;
 
@@ -47,8 +48,8 @@ void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
     
-    // hints in random order 
-    i=3;
+  
+    i=3;/** <hints in random order .*/
     j=rand()%i;
     int temp2 = j;
     fscanf(file,"%s", (newWordAndHint->hints[j])); 
@@ -90,7 +91,7 @@ void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
            
                               }
 
-        }//fim while
+        }
         
         rewind(file);
         j=rand()%i;
@@ -136,7 +137,7 @@ void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
                     k++;
                                   }
 
-        }while(dificulty_temp[0]==102 || dificulty_temp[0]==109);//fim while
+        }while(dificulty_temp[0]==102 || dificulty_temp[0]==109);
         
         rewind(file);
         
@@ -230,12 +231,14 @@ void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
 /////////////////////////////////////////////////////////////////////////////////
 
 
-/*function to count the number of lines that owns the file. this function 
-help to generate a random number that is within the number of rows that have 
-the file */
+/**
+ * function type integer countLines
+ * function to count the number of lines that owns the file. this function help to generate a random number that is within the number of rows that have 
+the file.
+*/
+int countLines(){
 
-int countLines()
-{
+
 
   FILE *file = fopen("dicas_primeira_fase.txt", "r");
   char character;
@@ -290,7 +293,7 @@ Ranking readRanking() {
     int i;
     int size;
 	
-    fp=fopen(RANKING_FILE,"r");//Abre o arquivo para leitura e grava��o
+    fp=fopen(RANKING_FILE,"r");/**<Abre o arquivo para leitura e gravacao.*/
     
     size = getSizeOfRanking(fp);
     if(!size) {
@@ -335,8 +338,8 @@ int getSizeOfRanking(FILE *fp) {
     
     rewind(fp);
     
-    // remove unexistent '\n' always counted
-    size--;
+    
+    size--; /**< remove unexistent '\n' always counted.*/
     return size;
 }
 
