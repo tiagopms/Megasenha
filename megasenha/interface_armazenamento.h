@@ -11,15 +11,15 @@
 #include<string.h>
 #include<time.h>
 
-void primeira_fase(FILE*arquivo, wordAndHints *newWordAndHint);
+void getWordFirstRound(FILE*arquivo, wordAndHints *newWordAndHint);
 
-void segunda_fase_facil(FILE*arquivo, wordAndHints *newWordAndHint);
+void getWordSecondRoundEasy(FILE*arquivo, wordAndHints *newWordAndHint);
 
-void segunda_fase_medio(FILE*arquivo, wordAndHints *newWordAndHint);
+void getWordSecondRoundMedium(FILE*arquivo, wordAndHints *newWordAndHint);
 
-void segunda_fase_dificil(FILE*arquivo, wordAndHints *newWordAndHint);
+void getWordSecondRoundHard(FILE*arquivo, wordAndHints *newWordAndHint);
 
-int contar_linhas();
+int countLines();
 
 void ranking (int recorde, char *name);
 

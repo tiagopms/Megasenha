@@ -20,45 +20,42 @@ typedef struct RankingStruct {
 char *RANKING_FILE = "ranking.txt";
 
 /////////////////////////////////////////////////////////////////////////////////
-/*funÁ„o para sortear palavra aleatorias para primeira parte do jogo*/
-/*recebe como referencia um ponterio para um arquivo, um veror de caracter para receber
- a palavra(senha), tres vetores de caractere para receber as dicas */
+/* function to randomly select words for the first part of the game */ 
 
-void primeira_fase(FILE*arquivo, wordAndHints *newWordAndHint){
+void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     static alreadyRandom = 0;
 
-    int i, j, contador=0; 
-    char palavra[15], nivel[1], temporaria[BUFSIZ];
-    rewind(arquivo);
-    /*nivel recebe o nivel da palavra(variavel local pois para essa fase nao ser√° importante saber o nivel. temporaria le a linha para poder chegar at√© a linha desejada*/ 
-    i=contar_linhas(); 
+    int i, j, counter=0; 
+    char temporaria[BUFSIZ];
+    rewind(file);
+    i = countLines(); 
     if(!alreadyRandom) {
         srand(time(NULL)); 
         alreadyRandom = 1;
     }
     j=rand()%i;
 
-    for(contador=1;contador<j;contador++){ 
-        fgets(temporaria,BUFSIZ,arquivo); 
+    for(counter=1;counter<j;counter++){ 
+        fgets(temporaria,BUFSIZ,file); 
     } 
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
     char temp[5];
-    fscanf(arquivo,"%s", (newWordAndHint->word)); 
-    fscanf(arquivo,"%s", temp);
+    fscanf(file,"%s", (newWordAndHint->word)); 
+    fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
     
     // hints in random order 
     i=3;
     j=rand()%i;
     int temp2 = j;
-    fscanf(arquivo,"%s", (newWordAndHint->hints[j])); 
+    fscanf(file,"%s", (newWordAndHint->hints[j])); 
     while(j == temp2) {
         j=rand()%i;
     }
-    fscanf(arquivo,"%s", (newWordAndHint->hints[j])); 
+    fscanf(file,"%s", (newWordAndHint->hints[j])); 
     if(j!=2 && temp2 != 2) {
         j = 2;
     } else { if(j!=1 && temp2 != 1) {
@@ -66,7 +63,7 @@ void primeira_fase(FILE*arquivo, wordAndHints *newWordAndHint){
     } else {
         j = 0;
     }}
-    fscanf(arquivo,"%s", (newWordAndHint->hints[j]));
+    fscanf(file,"%s", (newWordAndHint->hints[j]));
 
 //    printf("\na palavra e %s\n", newWordAndHint->word);
 }
@@ -74,31 +71,31 @@ void primeira_fase(FILE*arquivo, wordAndHints *newWordAndHint){
 /////////////////////////////////////////////////////////////////////////////////
 
 
-void segunda_fase_facil(FILE*arquivo, wordAndHints *newWordAndHint){
+void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
 
-    int i=0, j, contador=0;
-    char nivel[1], teste, temporaria[60], palavra[15], dica1[15], dica2[15], dica3[15];
-    rewind(arquivo);
+    int i=0, j, counter=0;
+    char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
+    rewind(file);
     
-        nivel[0]=102;
-        while(nivel[0]==102){
-            fscanf(arquivo,"%s", palavra);
-            fscanf(arquivo,"%s", nivel);
-            fscanf(arquivo,"%s", dica1);
-            fscanf(arquivo,"%s", dica2);
-            fscanf(arquivo,"%s", dica3);
+        dificulty_temp[0]=102;
+        while(dificulty_temp[0]==102){
+            fscanf(file,"%s", word_temp);
+            fscanf(file,"%s", dificulty_temp);
+            fscanf(file,"%s", Hint1);
+            fscanf(file,"%s", Hint2);
+            fscanf(file,"%s", Hint3);
            
-                if(nivel[0]==102){
+                if(dificulty_temp[0]==102){
                     i++;
            
                               }
 
         }//fim while
         
-        rewind(arquivo);
+        rewind(file);
         j=rand()%i;
-        for(contador=1;contador<j;contador++){
-            fgets(temporaria,BUFSIZ,arquivo);
+        for(counter=1;counter<j;counter++){
+            fgets(temporaria,BUFSIZ,file);
             }
                      
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
@@ -106,32 +103,31 @@ void segunda_fase_facil(FILE*arquivo, wordAndHints *newWordAndHint){
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
     char temp[5];
-    fscanf(arquivo,"%s", (newWordAndHint->word)); 
-    fscanf(arquivo,"%s", temp);
+    fscanf(file,"%s", (newWordAndHint->word)); 
+    fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
-    fscanf(arquivo,"%s", (newWordAndHint->hints[0])); 
-    fscanf(arquivo,"%s", (newWordAndHint->hints[1])); 
-    fscanf(arquivo,"%s", (newWordAndHint->hints[2]));
+    fscanf(file,"%s", (newWordAndHint->hints[0])); 
+    fscanf(file,"%s", (newWordAndHint->hints[1])); 
+    fscanf(file,"%s", (newWordAndHint->hints[2]));
 
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 
 
-void segunda_fase_medio(FILE*arquivo, wordAndHints *newWordAndHint){
+void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
 
-    int i=0, k=0, j, contador=0;
-    char nivel[1], teste, temporaria[60], palavra[15], dica1[15], dica2[15], dica3[15];
-    rewind(arquivo);
-    
+    int i=0, k=0, j, counter=0;
+    char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
+    rewind(file);
         do{
-            fscanf(arquivo,"%s", palavra);
-            fscanf(arquivo,"%s", nivel);
-            fscanf(arquivo,"%s", dica1);
-            fscanf(arquivo,"%s", dica2);
-            fscanf(arquivo,"%s", dica3);
+            fscanf(file,"%s", word_temp);
+            fscanf(file,"%s", dificulty_temp);
+            fscanf(file,"%s", Hint1);
+            fscanf(file,"%s", Hint2);
+            fscanf(file,"%s", Hint3);
                
-                if(nivel[0]==109){
+                if(dificulty_temp[0]==109){
                     i++;
            
                               }
@@ -140,17 +136,17 @@ void segunda_fase_medio(FILE*arquivo, wordAndHints *newWordAndHint){
                     k++;
                                   }
 
-        }while(nivel[0]==102 || nivel[0]==109);//fim while
+        }while(dificulty_temp[0]==102 || dificulty_temp[0]==109);//fim while
         
-        rewind(arquivo);
+        rewind(file);
         
         j=rand()%i;
         
-        for(contador=1;contador<k;contador++){
-            fgets(temporaria,BUFSIZ,arquivo);
+        for(counter=1;counter<k;counter++){
+            fgets(temporaria,BUFSIZ,file);
             }
-        for(contador=1;contador<j;contador++){
-            fgets(temporaria,BUFSIZ,arquivo);
+        for(counter=1;counter<j;counter++){
+            fgets(temporaria,BUFSIZ,file);
             }
                      
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
@@ -158,63 +154,63 @@ void segunda_fase_medio(FILE*arquivo, wordAndHints *newWordAndHint){
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
     char temp[5];
-    fscanf(arquivo,"%s", (newWordAndHint->word)); 
-    fscanf(arquivo,"%s", temp);
+    fscanf(file,"%s", (newWordAndHint->word)); 
+    fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
-    fscanf(arquivo,"%s", (newWordAndHint->hints[0])); 
-    fscanf(arquivo,"%s", (newWordAndHint->hints[1])); 
-    fscanf(arquivo,"%s", (newWordAndHint->hints[2]));
+    fscanf(file,"%s", (newWordAndHint->hints[0])); 
+    fscanf(file,"%s", (newWordAndHint->hints[1])); 
+    fscanf(file,"%s", (newWordAndHint->hints[2]));
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////
 
 
-void segunda_fase_dificil(FILE*arquivo, wordAndHints *newWordAndHint){
+void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
 
-    int i=0, k=0, l=0, j, contador=0;
-    char nivel[1], teste, temporaria[60], palavra[15], dica1[15], dica2[15], dica3[15];
-    rewind(arquivo);
+    int i=0, k=0, l=0, j, counter=0;
+    char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
+    rewind(file);
    
    
         do{
                    
-            fscanf(arquivo,"%s", palavra);
-            fscanf(arquivo,"%s", nivel);
-            fscanf(arquivo,"%s", dica1);
-            fscanf(arquivo,"%s", dica2);
-            fscanf(arquivo,"%s", dica3);
+            fscanf(file,"%s", word_temp);
+            fscanf(file,"%s", dificulty_temp);
+            fscanf(file,"%s", Hint1);
+            fscanf(file,"%s", Hint2);
+            fscanf(file,"%s", Hint3);
 
-                if(nivel[0]==100){
+                if(dificulty_temp[0]==100){
                     i++;
            
                               }
-                if(nivel[0]==102){
+                if(dificulty_temp[0]==102){
                      
                     k++;
                                   }
                                   
                 
-                if (nivel[0]==109){
+                if (dificulty_temp[0]==109){
                      
                     l++;
                                   }
 
-        }while(nivel[0]!=101);//fim while
+        }while(dificulty_temp[0]!=101);//fim while
         
-        rewind(arquivo);
+        rewind(file);
         
         j=rand()%i;
 
-        for(contador=1;contador<=l;contador++){
-            fgets(temporaria,BUFSIZ,arquivo);
+        for(counter=1;counter<=l;counter++){
+            fgets(temporaria,BUFSIZ,file);
             }
             
-        for(contador=1;contador<=k;contador++){
-            fgets(temporaria,BUFSIZ,arquivo);
+        for(counter=1;counter<=k;counter++){
+            fgets(temporaria,BUFSIZ,file);
             }
-        for(contador=1;contador<j;contador++){
-            fgets(temporaria,BUFSIZ,arquivo);
+        for(counter=1;counter<j;counter++){
+            fgets(temporaria,BUFSIZ,file);
             }
    
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
@@ -222,54 +218,50 @@ void segunda_fase_dificil(FILE*arquivo, wordAndHints *newWordAndHint){
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
     char temp[5];
-    fscanf(arquivo,"%s", (newWordAndHint->word)); 
-    fscanf(arquivo,"%s", temp);
+    fscanf(file,"%s", (newWordAndHint->word)); 
+    fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
-    fscanf(arquivo,"%s", (newWordAndHint->hints[0])); 
-    fscanf(arquivo,"%s", (newWordAndHint->hints[1])); 
-    fscanf(arquivo,"%s", (newWordAndHint->hints[2]));
+    fscanf(file,"%s", (newWordAndHint->hints[0])); 
+    fscanf(file,"%s", (newWordAndHint->hints[1])); 
+    fscanf(file,"%s", (newWordAndHint->hints[2]));
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////
 
 
-/*funÁ„o para contar a quantidade de linhas que possui o arquivo. essa funÁ„o
-ajuda para gerar um numero aleatorio que esteja dentro do numero de linhas que possui 
-o arquivo*/
+/*function to count the number of lines that owns the file. this function 
+help to generate a random number that is within the number of rows that have 
+the file */
 
-int contar_linhas()
+int countLines()
 {
-  // nome e local do arquivo que ser–± aberto para
-  // obtermos a quantidade de linhas
-  FILE *arquivo = fopen("dicas_primeira_fase.txt", "r");
-  char caractere;
-  int existe_linhas = 0;
-  int quant_linhas = 0;
+
+  FILE *file = fopen("dicas_primeira_fase.txt", "r");
+  char character;
+  int exist_line = 0;
+  int number_lines = 0;
     
-  while((caractere = fgetc(arquivo)) != EOF){
-    existe_linhas = 1; // h–± conte—ädo no arquivo
+  while((character = fgetc(file)) != EOF){
+    exist_line = 1; 
       
-    if(caractere == '\n'){ // –π uma quebra de linha?
-      // vamos incrementar a quantidade de linhas
-      quant_linhas++;             
+    if(character == '\n'){
+    
+      number_lines++;             
     } 
   }
   
-  // se n–≥o houver uma quebra de linha na —ältima linha
-  // a contagem ser–± sempre um a menos. Assim, –π melhor
-  // incrementar quant_linhas mais uma vez
-  if(existe_linhas)
-    quant_linhas++;
+ 
+  if(exist_line)
+    number_lines++;
   
-  // vamos exibir o resultado
-  
-  return quant_linhas;
+ 
+  return number_lines;
 } 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-//int inserir_nova_palavra(FILE*arquivo, FILE*arquivo, char palavra[15], char dica1[15], char dica2[15], char dica3[15]){
+//int NewWord(FILE*arquivo, ){
     
     
 
@@ -285,10 +277,7 @@ void ranking (int record, char *name)
     ranking = readRanking();
     
     Score newScore = fromNameAndPointsToScore(record, name);
-    printf("Insert\n");
     insertNewScoreInRanking(&ranking, newScore);
-    
-    printf("Write\n");
     
     writeRanking(ranking);
     
@@ -301,13 +290,11 @@ Ranking readRanking() {
     int i;
     int size;
 	
-    fp=fopen(RANKING_FILE,"r");//Abre o arquivo para leitura e gravaÁ„o
+    fp=fopen(RANKING_FILE,"r");//Abre o arquivo para leitura e gravaÔøΩÔøΩo
     
     size = getSizeOfRanking(fp);
-    printf("Size: %d\n", size);
     if(!size) {
         ranking.size = 0;
-        printf("Empty ranking, will create one\n");
         return ranking;
     }
     
@@ -320,20 +307,11 @@ Ranking readRanking() {
         
         fscanf(fp, "%s", (ranking.scores + i)->name);
         fscanf(fp, "%d", &( (ranking.scores + i)->score ));
-        printf("i=%d\n", i);
-        printf("size=%d\n", ranking.size);
-        printf("size=%d\n", (ranking.scores + i)->score);
-        printf("name=%s\n", (ranking.scores + i)->name);
     }
     
     if(ranking.size > 10) {
         printf("Error: ranking in wrong format - More than 10 names\n");
         ranking.size = 10;
-    }
-    
-    printf("Size: %d\n", ranking.size);
-    for (i = 0; i < ranking.size ; i++) {
-        printf("%s - %d\n", (ranking.scores + i)->name, (ranking.scores + i)->score);
     }
     
     fclose(fp);

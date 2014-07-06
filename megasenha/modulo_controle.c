@@ -26,7 +26,7 @@ int iniciaPrimeiraFase(int argc, char *argv[], int *score) {
     sleep(1);
     while (rodada<6) {
 
-        primeira_fase(arquivo, &(newWordAndHint));
+        getWordFirstRound(arquivo, &(newWordAndHint));
         newWord(playerTurn+1,newWordAndHint); 
         while (updateInterface()) {
             if (!waitingPlayer()) {
@@ -72,7 +72,7 @@ int iniciaPrimeiraFase(int argc, char *argv[], int *score) {
                 wordAndHints newWordAndHint;
                 updateInfoLabel ("Houve um empate!", "blue");
 
-                primeira_fase(arquivo, &newWordAndHint);
+                getWordFirstRound(arquivo, &newWordAndHint);
                 newWord(playerTurn+1, newWordAndHint); 
                 while (updateInterface()) {
                     if (!waitingPlayer()) {
@@ -179,15 +179,15 @@ void iniciaSegundaFase(int argc, char *argv[], int playerVencedor, int scoreFirs
                 updateInfoLabel (buf, "blue");
 
                 if(etapa<4){
-                    segunda_fase_facil(arquivo, &newWordAndHint);
+                    getWordSecondRoundEasy(arquivo, &newWordAndHint);
                     newWord(playerVencedor, newWordAndHint); 
                 } else {
                 if(etapa>3 && etapa<7){
-                    segunda_fase_medio(arquivo, &newWordAndHint);
+                    getWordSecondRoundMedium(arquivo, &newWordAndHint);
                     newWord(playerVencedor, newWordAndHint); 
                 }
                 else{
-                    segunda_fase_dificil(arquivo, &newWordAndHint);
+                    getWordSecondRoundHard(arquivo, &newWordAndHint);
                     newWord(playerVencedor, newWordAndHint); 
                 } }
             }
