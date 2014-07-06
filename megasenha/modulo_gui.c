@@ -34,11 +34,18 @@ typedef struct GetNameInterfaceStruct {
     char *name;
 } GetNameInterface;
 
-typedef struct InitialInterfaceStruct {
+typedef struct MainInterfaceStruct {
     GtkWidget *window;
 
     int choice;
-} InitialInterface;
+} MainInterface;
+
+typedef struct RankingInterfaceStruct {
+    GtkWidget *window;
+
+    int closed;
+} RankingInterface;
+
 
 
 #define GUI_OWN
@@ -51,13 +58,14 @@ static int numberOfPlayers;
 static int playerPlaying = 0;
 static InfoInterface infoInterface;
 static GetNameInterface getNameInterface;
-static InitialInterface initialInterface;
+static MainInterface mainInterface;
+static RankingInterface rankingInterface;
+static int rankingWindowClosed = 0;
 
 // closing program control variables
 static quitApplication = 0;
 static stopTimeOuts[2] = {0, 0};
 static int playerGaveUp = 0;
-
 
 // if window closed abruptly print that player surrendered and quit program
 void destroy(GtkWidget *widget, gpointer data) {
@@ -70,10 +78,7 @@ void destroy(GtkWidget *widget, gpointer data) {
     stopTimeOuts[1] = 1;
 }
 
-int startInterface(int argc, char *argv[], int nPlayers, int playerToPlay) {
-    //start gtk
-    gtk_init(&argc, &argv);
-
+int startInterface(int nPlayers, int playerToPlay) {
     // creates windows for all players
     if(nPlayers == 2) {
         createInfoWindow(&infoInterface);
@@ -676,31 +681,25 @@ int updateGetName()
     return 1;
 }
 
-void startInitialInterface() {
-    // initializes global constants used
-    initializeConstants();
-    // intializes blank window
-    initializeInitialWindow(&(initialInterface.window));
-    // adds items to window
-    addItemsInitialWindow(&initialInterface);
-    // shows everything in window
-    gtk_widget_show_all(initialInterface.window);
-}
+void startMainInterface(int argc, char *argv[]) {
+    //start gtk
+    gtk_init(&argc, &argv);
 
-void initializeConstants() {
-    // global constants equivalent to program modes
-    GUI_GAME = 1;
-    GUI_VIEW_RANKING = 2;
-    GUI_ADD_WORD = 3;
+    // intializes blank window
+    initializeMainWindow(&(mainInterface.window));
+    // adds items to window
+    addItemsMainWindow(&mainInterface);
+    // shows everything in window
+    gtk_widget_show_all(mainInterface.window);
 }
 
 // initiate get name window
-int initializeInitialWindow(GtkWidget **window) {
+int initializeMainWindow(GtkWidget **window) {
     // initialize window
     *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     // set title
-    char buf[50];
+    char buf[150];
     sprintf(buf, "megasenha - menu");
     gtk_window_set_title(GTK_WINDOW(*window), buf);
 
@@ -708,7 +707,7 @@ int initializeInitialWindow(GtkWidget **window) {
     gtk_window_set_default_size(GTK_WINDOW(*window), 397, 107);
     gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
     gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 397/2, gdk_screen_height()*9/20);
-//    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroy), (gpointer) "1");
+    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroyMainWindow), NULL);
 
     // sets and creates icons for windows and tell windows manager not to put them together
     gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg"));
@@ -719,21 +718,165 @@ int initializeInitialWindow(GtkWidget **window) {
     return 1;
 }
 
-void addItemsInitialWindow(InitialInterface *gui) {
+void addItemsMainWindow(MainInterface *gui) {
     // creates horizontal box to hold everything
     GtkWidget *parentHbox;
     parentHbox = gtk_hbox_new(FALSE, 0);
     gtk_container_add (GTK_CONTAINER (gui->window), parentHbox);
 
-    // adds timer, hints and input text boxes
-    //addGetNameTextBox(gui, parentHbox);
+    // creates buttons frame
+    GtkWidget *frame;
+    frame = gtk_frame_new("Choose one mode");
+    gtk_widget_set_size_request (frame, 390, 100);
+    gtk_box_pack_start(GTK_BOX(parentHbox), frame, FALSE, FALSE, 0);
+
+    // creates horizontal box to hold the three buttons
+    GtkWidget *buttonsHbox;
+    buttonsHbox = gtk_hbox_new(FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(frame), buttonsHbox);
+
+    // adds buttons 
+    addButtonsToMain(buttonsHbox);
 }
 
-int updateInitialInterface()
+void addButtonsToMain(GtkWidget *buttonsHbox) {
+    int *mode1 = (int *) malloc (sizeof(int));
+    int *mode2 = (int *) malloc (sizeof(int));
+    int *mode3 = (int *) malloc (sizeof(int));
+    // creates game button and binds click to setMainProgramMode function
+    GtkWidget *gameButton = addButtonToHbox(buttonsHbox, "Game");
+    *mode1 = 1;
+    gtk_signal_connect(GTK_OBJECT(gameButton), "clicked", GTK_SIGNAL_FUNC(setMainProgramMode), (gpointer) mode1);
+
+    // creates ranking button and binds click to setMainProgramMode function
+    GtkWidget *rankingButton = addButtonToHbox(buttonsHbox, "View ranking");
+    *mode2 = 2;
+    gtk_signal_connect(GTK_OBJECT(rankingButton), "clicked", GTK_SIGNAL_FUNC(setMainProgramMode), (gpointer) mode2);
+
+    // creates add word button and binds click to setMainProgramMode function
+    GtkWidget *addWordButton = addButtonToHbox(buttonsHbox, "Add word");
+    *mode3 = 3;
+    gtk_signal_connect(GTK_OBJECT(addWordButton), "clicked", GTK_SIGNAL_FUNC(setMainProgramMode), (gpointer) mode3);
+}
+
+GtkWidget *addButtonToHbox(GtkWidget *buttonsHbox, char *buttonLabel) {
+    // creates button and adds it to hbox
+    GtkWidget *button;
+    button = gtk_button_new_with_label(buttonLabel);
+    gtk_widget_set_size_request (button, 130, 100);
+    gtk_box_pack_start(GTK_BOX(buttonsHbox), button, FALSE, FALSE, 0);
+    
+    return button;
+}
+
+// sets main functionallity of program
+void setMainProgramMode(GtkWidget *widget, gpointer data) {
+    int *choice = (int*) data;
+    mainInterface.choice = *choice;
+}
+
+// if window closed abruptly stop program
+void destroyMainWindow(GtkWidget *widget, gpointer data) {
+    mainInterface.choice = -1;
+}
+
+// closes main window interface
+void closeMainWindow() {
+    if (mainInterface.choice != -1) {
+        gtk_widget_destroy(mainInterface.window);
+    }
+}
+
+int updateMainInterface()
 {
     gtk_main_iteration();
-    return initialInterface.choice;
+    return mainInterface.choice;
 }
 
+void startRankingInterface(int argc, char *argv[]) {
+    //start gtk
+    gtk_init(&argc, &argv);
+    GtkWidget *window;
 
+    // intializes blank window
+    initializeRankingWindow(&(window));
+    // adds items to window
+    addItemsRankingWindow(&window);
+    // shows everything in window
+    gtk_widget_show_all(window);
+}
 
+// initiate get name window
+int initializeRankingWindow(GtkWidget **window) {
+    // initialize window
+    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+    // set title
+    char buf[150];
+    sprintf(buf, "megasenha - ranking");
+    gtk_window_set_title(GTK_WINDOW(*window), buf);
+
+    // set size and position and connects close window with destroy function
+    gtk_window_set_default_size(GTK_WINDOW(*window), 597, 107);
+    gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
+    gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 597/2, gdk_screen_height()/2);
+    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroyRankingWindow), NULL);
+
+    // sets and creates icons for windows and tell windows manager not to put them together
+    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg"));
+    gtk_window_set_wmclass(GTK_WINDOW (*window), "alal2Window", "megasenha"); 
+
+    gtk_widget_show_all(*window);
+
+    return 1;
+}
+
+void addItemsRankingWindow(GtkWidget **window) {
+    // creates horizontal box to hold everything
+    GtkWidget *parentHbox;
+    parentHbox = gtk_hbox_new(FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (*window), parentHbox);
+
+    // creates buttons frame
+    GtkWidget *frame;
+    frame = gtk_frame_new("Choose one mode");
+    gtk_widget_set_size_request (frame, 390, 100);
+    gtk_box_pack_start(GTK_BOX(parentHbox), frame, FALSE, FALSE, 0);
+
+    // creates horizontal box to hold the three buttons
+    GtkWidget *rankingVbox;
+    rankingVbox = gtk_vbox_new(FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(frame), rankingVbox);
+
+    // adds ranking item
+    wordAndHints wordAndHintsItem;
+    wordAndHintsItem.word = "alal";
+    addRankingEntry(rankingVbox, wordAndHintsItem);
+    addRankingEntry(rankingVbox, wordAndHintsItem);
+}
+
+void addRankingEntry(GtkWidget *parentVbox, wordAndHints wordAndHintsItem) {
+    // creates horizontal box to hold the name and score
+//    GtkWidget *rankingHbox;
+ //   rankingHbox = gtk_hbox_new(FALSE, 0);
+ //   gtk_box_pack_start(GTK_BOX(parentVbox), rankingHbox, FALSE, FALSE, 0);
+    
+    char buf[150];
+    sprintf(buf, "%s\t-\t%d", "oi", 300);
+
+    // initializes it with name and score from buffer
+    GtkWidget *label = gtk_label_new (buf);
+    gtk_box_pack_start(GTK_BOX(parentVbox), label, FALSE, FALSE, 0);
+}
+
+// closes main window interface
+void destroyRankingWindow() {
+    rankingWindowClosed = 1;
+}
+
+// updates interface and return if interface was closed
+int updateRankingInterface()
+{
+    gtk_main_iteration();
+    return !rankingWindowClosed;
+}

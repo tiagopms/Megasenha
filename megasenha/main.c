@@ -13,14 +13,33 @@
 #include "interface_controle.h"
 
 int main(int argc, char *argv[]) {
+    int choice;
+    choice = startMainWindow(argc, argv);
+    
     int playerVencedor = 1;//!< Integer of the nunber of the winner player
     int scoreFirstRound = 0;//!< Integer of the score of the first round
 
-    playerVencedor = iniciaPrimeiraFase(argc, argv, &scoreFirstRound);//!< Receive the winner player
-    closeInterface();
-    updateInterface();
-    printf("o player vencedor e %d\n", playerVencedor);//!< Show the winner player
-    iniciaSegundaFase(argc, argv, playerVencedor, scoreFirstRound);//!<Started the second round
+    switch(choice) {
+        case GUI_GAME:
+
+            playerVencedor = iniciaPrimeiraFase(&scoreFirstRound);//!< Receive the winner player
+            closeInterface();
+            updateInterface();
+            printf("o player vencedor e %d\n", playerVencedor);//!< Show the winner player
+            iniciaSegundaFase(playerVencedor, scoreFirstRound);//!<Started the second round
+
+            break;
+        case GUI_VIEW_RANKING:
+            showRanking(argc, argv);
+            printf("View ranking\n");
+            break;
+        case GUI_ADD_WORD:
+            printf("Add word\n");
+            break;
+        default:
+            printf("Window closed without any option chosen\n");
+            break;
+    }
 }
 
 // TODO: add interface to add new words

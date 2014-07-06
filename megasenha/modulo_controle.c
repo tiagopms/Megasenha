@@ -5,7 +5,7 @@
 #include"interface_armazenamento.h"
 
 
-int iniciaPrimeiraFase(int argc, char *argv[], int *score) {
+int iniciaPrimeiraFase(int *score) {
   
     int primeiraIteracao = 1, pntPlayer1=0,pntPlayer2=0;
     int dicas[2]= {0,0} , i=0,j=0;
@@ -21,7 +21,7 @@ int iniciaPrimeiraFase(int argc, char *argv[], int *score) {
     }
 
     wordAndHints newWordAndHint;
-    startInterface(argc, argv, 2, 1);
+    startInterface(2, 1);
     updateInterface();
     sleep(1);
     while (rodada<6) {
@@ -112,7 +112,7 @@ int iniciaPrimeiraFase(int argc, char *argv[], int *score) {
     }
 }
 
-void iniciaSegundaFase(int argc, char *argv[], int playerVencedor, int scoreFirstRound){
+void iniciaSegundaFase(int playerVencedor, int scoreFirstRound){
     int primeiraIteracao = 1, pntPlayer1=0,pntPlayer2=0;
     int dicas[2], i=0,j=0;
     char buf[150];
@@ -132,7 +132,7 @@ void iniciaSegundaFase(int argc, char *argv[], int playerVencedor, int scoreFirs
 
     wordAndHints newWordAndHint;
     updatePlayerLabel (playerVencedor);
-    startInterface(argc, argv, 1, playerVencedor);
+    startInterface(1, playerVencedor);
 
     while (etapa<9 && flag==0) {
         while (updateInterface()) {
@@ -213,48 +213,7 @@ void iniciaSegundaFase(int argc, char *argv[], int playerVencedor, int scoreFirs
     printf("Parabens! Sua pontuacao foi de %d pontos!\n", pontosFinais[etapa-1] * scoreFirstRound);
     sprintf(buf, "Parabens! Sua pontuacao foi de %d pontos!", pontosFinais[etapa-1] * scoreFirstRound);
     updateInfoLabel (buf, "green");
-    /*switch (etapa){
-        case 1:
-            printf("Parabens! Sua pontuacao foi de 10 pontos!");
-            sprintf(buf, "Parabens! Sua pontuacao foi de 10 pontos!");
-            updateInfoLabel (buf, "green");
-            break;
-        case 2:
-            printf("Parabens! Sua pontuacao foi de 100 pontos!");
-            sprintf(buf, "Parabens! Sua pontuacao foi de 100 pontos!");
-            updateInfoLabel (buf, "green");
-            break;
-        case 3:
-            printf("Parabens! Sua pontuacao foi de 500 pontos!");
-            sprintf(buf, "Parabens! Sua pontuacao foi de 500 pontos!");
-            updateInfoLabel (buf, "green");
-            break;
-        case 4:
-            printf("Parabens! Sua pontuacao foi de 1.000 pontos!");
-            sprintf(buf, "Parabens! Sua pontuacao foi de 1.000 pontos!");
-            updateInfoLabel (buf, "green");
-            break;
-        case 5: 
-            printf("Parabens! Sua pontuacao foi de 5.000 pontos!");
-            sprintf(buf, "Parabens! Sua pontuacao foi de 5.000 pontos!");
-            updateInfoLabel (buf, "green");
-            break;
-        case 6: 
-            printf("Parabes! Sua pontuacao foi de 10.000 pontos!");
-            sprintf(buf, "Parabes! Sua pontuacao foi de 10.000 pontos!");
-            updateInfoLabel (buf, "green");
-            break;
-        case 7:
-            printf("Parabes! Sua pontuacao foi de 500.000 pontos!");
-            sprintf(buf, "Parabes! Sua pontuacao foi de 500.000 pontos!");
-            updateInfoLabel (buf, "green");
-            break;
-        default:
-            printf("Voce ganhou o jogo! Sua pontuacao foi 1.000.000 pontos!");
-            sprintf(buf, "Voce ganhou o jogo! Sua pontuacao foi 1.000.000 pontos!");
-            updateInfoLabel (buf, "green");
-            break;
-    }*/
+
     startGetNameInterface();
 
     // get winner's name
@@ -265,4 +224,24 @@ void iniciaSegundaFase(int argc, char *argv[], int playerVencedor, int scoreFirs
 
     printf("%s\n", name);
     sleep(2);
+}
+
+int startMainWindow(int argc, char *argv[]) {
+    startMainInterface(argc, argv);
+    int choice = 0;
+    
+    while(!choice) {
+        choice = updateMainInterface();
+    }
+
+    closeMainWindow();
+  //  sleep(1);
+  //  updateMainInterface();
+    
+    return choice;
+}
+
+void showRanking(int argc, char *argv[]) {
+    startRankingInterface(argc, argv);
+    while(updateRankingInterface());
 }

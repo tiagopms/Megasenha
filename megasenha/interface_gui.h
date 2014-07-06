@@ -10,7 +10,7 @@
 #endif
 
 // starts the interface, receives command line arguments (argc and argv) (necessary for gtk) and the number of players is round (1 or 2) (if one player set which, if both set last value to any integer)
-GUI_EXTERN int startInterface(int argc, char *argv[], int nPlayers, int playerToPlay);
+GUI_EXTERN int startInterface(int nPlayers, int playerToPlay);
 // function closes open windows
 GUI_EXTERN void closeInterface();
 
@@ -36,11 +36,24 @@ GUI_EXTERN int updateGetName(void);
 // returns the name typed in the get name window
 GUI_EXTERN char *getName(void);
 
+// starts main window interface
+GUI_EXTERN void startMainInterface(int argc, char *argv[]);
 // returns an integer that says if user chose any of the options (game, view ranking, add word), if it has returns which
 GUI_EXTERN int updateInitialInterface(void);
-GUI_EXTERN int GUI_GAME;
-GUI_EXTERN int GUI_VIEW_RANKING;
-GUI_EXTERN int GUI_ADD_WORD;
+//closes main window
+GUI_EXTERN void closeMainWindow();
+enum {
+    GUI_GAME = 1,
+    GUI_VIEW_RANKING = 2,
+    GUI_ADD_WORD = 3
+};
+
+// starts ranking window interface
+void startRankingInterface(int argc, char *argv[]);
+// closes ranking window
+void destroyRankingWindow();
+// updates ranking interface and returns if it was closed
+int updateRankingInterface();
 
 // declare functions intern to GUI module
 #ifdef GUI_OWN
@@ -97,10 +110,18 @@ GUI_EXTERN int GUI_ADD_WORD;
     void sendName(GtkWidget *widget, gpointer data);
 
     // functions for initial window
-    void startInitialInterface();
-    void initializeConstants();
-    int initializeInitialWindow(GtkWidget **window);
-    void addItemsInitialWindow(InitialInterface *gui);
+    int initializeMainWindow(GtkWidget **window);
+    void addItemsMainWindow(MainInterface *gui);
+    void addButtonsToMain(GtkWidget *buttonsHbox);
+    GtkWidget *addButtonToHbox(GtkWidget *buttonsHbox, char *buttonLabel);
+    void setMainProgramMode(GtkWidget *widget, gpointer data);
+    // receives callback if window was destroyed
+    void destroyMainWindow(GtkWidget *widget, gpointer data);
+
+    // functions for ranking window
+    int initializeRankingWindow(GtkWidget **window);
+    void addItemsRankingWindow(GtkWidget **window);
+    void addRankingEntry(GtkWidget *parentVbox, wordAndHints wordAndHintsItem);
 #endif
 
 #undef GUI_EXTERN
