@@ -66,10 +66,10 @@ void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     }}
     fscanf(file,"%s", (newWordAndHint->hints[j]));
 
-//    printf("\na palavra e %s\n", newWordAndHint->word);
+
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+
 
 
 void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
@@ -113,7 +113,6 @@ void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////
 
 
 void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
@@ -164,7 +163,7 @@ void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
+
 
 
 void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
@@ -197,7 +196,7 @@ void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
                     l++;
                                   }
 
-        }while(dificulty_temp[0]!=101);//fim while
+        }while(dificulty_temp[0]!=101);
         
         rewind(file);
         
@@ -228,7 +227,7 @@ void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
+
 
 
 /**
@@ -262,18 +261,8 @@ int countLines(){
   return number_lines;
 } 
 
-////////////////////////////////////////////////////////////////////////////////
-
-//int NewWord(FILE*arquivo, ){
-    
-    
 
 
-
-//}
-
-
-/////////////////////////////////////////////////////////////////////////
 void ranking (int record, char *name)
 {
     Ranking ranking;
@@ -395,5 +384,3 @@ Score fromNameAndPointsToScore(int points, char *name) {
     
     return score;
 }
-
-/////////////////////////////////////////////////////////////////////////////////////
