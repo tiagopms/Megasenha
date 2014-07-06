@@ -55,6 +55,17 @@ void destroyRankingWindow();
 // updates ranking interface and returns if it was closed
 int updateRankingInterface();
 
+// starts add word window interface
+void startAddWordInterface();
+// closes add word window
+void destroyAddWordWindow();
+// updates add word interface and returns if it was closed
+int updateAddWordInterface();
+// returns a boolean representing if there's a new word and hints item added
+int hasNewItemInAddWord();
+// returns the newest word and hints item that was added
+wordAndHints getNewWordAndHints();
+
 // declare functions intern to GUI module
 #ifdef GUI_OWN
     // receives callback if window was destroyed
@@ -122,6 +133,11 @@ int updateRankingInterface();
     int initializeRankingWindow(GtkWidget **window);
     void addItemsRankingWindow(GtkWidget **window);
     void addRankingEntry(GtkWidget *parentVbox, wordAndHints wordAndHintsItem);
+
+    // functions for add word window
+    int initializeAddWordWindow(GtkWidget **window);
+    void addItemsAddWordWindow(AddWordInterface *gui);
+    void addWordAndHints(GtkWidget *widget, gpointer data);
 #endif
 
 #undef GUI_EXTERN

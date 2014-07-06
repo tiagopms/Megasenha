@@ -40,13 +40,18 @@ typedef struct MainInterfaceStruct {
     int choice;
 } MainInterface;
 
-typedef struct RankingInterfaceStruct {
+typedef struct AddWordInterfaceStruct {
     GtkWidget *window;
 
+    GtkWidget *wordTextBox;
+    GtkWidget *hintTextBox[3];
+    GtkWidget *difficultyComboBox;
+
+    int newItem;
+    wordAndHints newWordAndHints;
+    
     int closed;
-} RankingInterface;
-
-
+} AddWordInterface;
 
 #define GUI_OWN
     #include "interface_gui.h"
@@ -59,7 +64,7 @@ static int playerPlaying = 0;
 static InfoInterface infoInterface;
 static GetNameInterface getNameInterface;
 static MainInterface mainInterface;
-static RankingInterface rankingInterface;
+static AddWordInterface addWordInterface;
 static int rankingWindowClosed = 0;
 
 // closing program control variables
@@ -879,4 +884,159 @@ int updateRankingInterface()
 {
     gtk_main_iteration();
     return !rankingWindowClosed;
+}
+
+void startAddWordInterface() {
+    // intializes blank window
+    initializeAddWordWindow(&(addWordInterface.window));
+    // adds items to window
+    addItemsAddWordWindow(&addWordInterface);
+    // shows everything in window
+    gtk_widget_show_all(addWordInterface.window);
+}
+
+// initiate add word window
+int initializeAddWordWindow(GtkWidget **window) {
+    // initialize window
+    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+    // set title
+    char buf[150];
+    sprintf(buf, "megasenha - ranking");
+    gtk_window_set_title(GTK_WINDOW(*window), buf);
+
+    // set size and position and connects close window with destroy function
+    gtk_window_set_default_size(GTK_WINDOW(*window), 597, 107);
+    gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
+    gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 597/2, gdk_screen_height()/2);
+    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC(destroyAddWordWindow), NULL);
+
+    // sets and creates icons for windows and tell windows manager not to put them together
+    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg"));
+    gtk_window_set_wmclass(GTK_WINDOW (*window), "alal2Window", "megasenha"); 
+
+    gtk_widget_show_all(*window);
+
+    return 1;
+}
+
+void addItemsAddWordWindow(AddWordInterface *gui) {
+    gui->newItem = 1;
+    gui->closed = 0;
+    
+    // creates horizontal box to hold everything
+    GtkWidget *parentVbox;
+    parentVbox = gtk_vbox_new(FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (gui->window), parentVbox);
+
+    // creates word frame
+    GtkWidget *frame;
+    frame = gtk_frame_new("Write the word to add");
+    gtk_widget_set_size_request (frame, 390, 50);
+    gtk_box_pack_start(GTK_BOX(parentVbox), frame, FALSE, FALSE, 0);
+
+    // creates word input box
+    gui->wordTextBox = gtk_entry_new();
+    gtk_entry_set_text (GTK_ENTRY (gui->wordTextBox), "");
+    gtk_container_add (GTK_CONTAINER (frame), gui->wordTextBox);
+
+    // creates hints frame
+    GtkWidget *frameHints;
+    frameHints = gtk_frame_new("Write the hints to add");
+    gtk_widget_set_size_request (frameHints, 390, 100);
+    gtk_box_pack_start(GTK_BOX(parentVbox), frameHints, FALSE, FALSE, 0);
+
+    // creates vertical box to hold the three hints input boxes 
+    GtkWidget *hintsVbox;
+    hintsVbox = gtk_vbox_new(FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(frameHints), hintsVbox);
+
+    int i = 0;
+    for( i = 0 ; i < 3 ; i++ ) {
+        // creates hints input box
+        gui->hintTextBox[i] = gtk_entry_new();
+        gtk_entry_set_text (GTK_ENTRY (gui->hintTextBox[i]), "");
+        gtk_box_pack_start (GTK_BOX (hintsVbox), gui->hintTextBox[i], FALSE, FALSE, 0);
+    }
+
+    // creates horizontal box to hold button and difficulty text box
+    GtkWidget *hbox;
+    hbox = gtk_hbox_new(FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(parentVbox), hbox, FALSE, FALSE, 0);
+
+    // creates scroll down box to hold difficulty options
+    gui->difficultyComboBox = gtk_combo_box_new_text();
+    gtk_box_pack_start(GTK_BOX(hbox), gui->difficultyComboBox, FALSE, FALSE, 0);
+    gtk_combo_box_append_text( GTK_COMBO_BOX( gui->difficultyComboBox ), "facil" );
+    gtk_combo_box_append_text( GTK_COMBO_BOX( gui->difficultyComboBox ), "medio" );
+    gtk_combo_box_append_text( GTK_COMBO_BOX( gui->difficultyComboBox ), "dificil" );
+
+    // creates enter button and binds click to addWordAndHints function
+    GtkWidget *button;
+    button = gtk_button_new_with_label("Add word and hints");
+    gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+    gtk_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(addWordAndHints), (gpointer) gui);
+}
+
+void addWordAndHints(GtkWidget *widget, gpointer data) {
+    // simplify notation
+    AddWordInterface *gui = (AddWordInterface *) data;
+    int i = 0;
+    
+    int index = gtk_combo_box_get_active( GTK_COMBO_BOX( gui->difficultyComboBox ) );
+    printf("index= %d\n", index);
+    if(index == -1) {
+        printf("Error, choose a difficulty\n");
+        return;
+    }
+    
+    // get word from entry box
+    char *word = (char *) gtk_entry_get_text(GTK_ENTRY(gui->wordTextBox));
+    if(strcmp(word, "") == 0) {
+        printf("Error, all fields are necessary\n");
+        return;
+    }
+    char *hints[3];
+    for( i = 0 ; i < 3 ; i++ ) {
+        hints[i] = (char *) gtk_entry_get_text(GTK_ENTRY(gui->hintTextBox[i]));
+        if(strcmp(hints[i], "") == 0) {
+            printf("Error, all fields are necessary\n");
+            return;
+        }
+    }
+
+    wordAndHints wordAndHintsItem;
+    wordAndHintsItem.word = word;
+    for( i = 0 ; i < 3 ; i++ ) {
+        wordAndHintsItem.hints[i] = hints[i];
+    }
+
+    gui->newItem = 1;
+    gui->newWordAndHints = wordAndHintsItem;
+
+    gtk_entry_set_text (GTK_ENTRY(gui->wordTextBox), "");
+    for( i = 0 ; i < 3 ; i++ ) {
+        gtk_entry_set_text (GTK_ENTRY(gui->hintTextBox[i]), "");
+    }
+}
+
+// closes main window interface
+void destroyAddWordWindow() {
+    addWordInterface.closed = 1;
+}
+
+// updates interface and return if interface was closed
+int updateAddWordInterface()
+{
+    gtk_main_iteration();
+    return !addWordInterface.closed;
+}
+
+int hasNewItemInAddWord() {
+    return addWordInterface.newItem;
+}
+
+wordAndHints getNewWordAndHints() {
+    addWordInterface.newItem = 1;
+    return addWordInterface.newWordAndHints;
 }

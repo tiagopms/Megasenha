@@ -245,3 +245,13 @@ void showRanking(int argc, char *argv[]) {
     startRankingInterface(argc, argv);
     while(updateRankingInterface());
 }
+
+void startAddWordWindow() {
+    wordAndHints newItem; 
+    startAddWordInterface();
+    while(updateAddWordInterface()) {
+        if(hasNewItemInAddWord()) {
+            newItem = getNewWordAndHints();
+        }
+    }
+}

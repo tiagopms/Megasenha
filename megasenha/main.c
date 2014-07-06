@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
             printf("View ranking\n");
             break;
         case GUI_ADD_WORD:
+            startAddWordWindow();
             printf("Add word\n");
             break;
         default:
