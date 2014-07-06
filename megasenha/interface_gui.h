@@ -33,8 +33,14 @@ int gaveUp();
 
 // returns a boolean that says if name was written, also updates the gui
 GUI_EXTERN int updateGetName(void);
-// returns a boolean that says if name was written, also updates the gui
+// returns the name typed in the get name window
 GUI_EXTERN char *getName(void);
+
+// returns an integer that says if user chose any of the options (game, view ranking, add word), if it has returns which
+GUI_EXTERN int updateInitialInterface(void);
+GUI_EXTERN int GUI_GAME;
+GUI_EXTERN int GUI_VIEW_RANKING;
+GUI_EXTERN int GUI_ADD_WORD;
 
 // declare functions intern to GUI module
 #ifdef GUI_OWN
@@ -89,6 +95,12 @@ GUI_EXTERN char *getName(void);
     void addGetNameTextBox(GetNameInterface *gui, GtkWidget *parentVbox);
     void createGetNameTextBox(GetNameInterface *gui, GtkWidget *frame);
     void sendName(GtkWidget *widget, gpointer data);
+
+    // functions for initial window
+    void startInitialInterface();
+    void initializeConstants();
+    int initializeInitialWindow(GtkWidget **window);
+    void addItemsInitialWindow(InitialInterface *gui);
 #endif
 
 #undef GUI_EXTERN

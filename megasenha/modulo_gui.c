@@ -34,6 +34,13 @@ typedef struct GetNameInterfaceStruct {
     char *name;
 } GetNameInterface;
 
+typedef struct InitialInterfaceStruct {
+    GtkWidget *window;
+
+    int choice;
+} InitialInterface;
+
+
 #define GUI_OWN
     #include "interface_gui.h"
 #undef GUI_OWN
@@ -44,11 +51,13 @@ static int numberOfPlayers;
 static int playerPlaying = 0;
 static InfoInterface infoInterface;
 static GetNameInterface getNameInterface;
+static InitialInterface initialInterface;
 
 // closing program control variables
 static quitApplication = 0;
 static stopTimeOuts[2] = {0, 0};
 static int playerGaveUp = 0;
+
 
 // if window closed abruptly print that player surrendered and quit program
 void destroy(GtkWidget *widget, gpointer data) {
@@ -666,3 +675,65 @@ int updateGetName()
     gtk_main_iteration ();
     return 1;
 }
+
+void startInitialInterface() {
+    // initializes global constants used
+    initializeConstants();
+    // intializes blank window
+    initializeInitialWindow(&(initialInterface.window));
+    // adds items to window
+    addItemsInitialWindow(&initialInterface);
+    // shows everything in window
+    gtk_widget_show_all(initialInterface.window);
+}
+
+void initializeConstants() {
+    // global constants equivalent to program modes
+    GUI_GAME = 1;
+    GUI_VIEW_RANKING = 2;
+    GUI_ADD_WORD = 3;
+}
+
+// initiate get name window
+int initializeInitialWindow(GtkWidget **window) {
+    // initialize window
+    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+    // set title
+    char buf[50];
+    sprintf(buf, "megasenha - menu");
+    gtk_window_set_title(GTK_WINDOW(*window), buf);
+
+    // set size and position and connects close window with destroy function
+    gtk_window_set_default_size(GTK_WINDOW(*window), 397, 107);
+    gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
+    gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 397/2, gdk_screen_height()*9/20);
+//    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroy), (gpointer) "1");
+
+    // sets and creates icons for windows and tell windows manager not to put them together
+    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg"));
+    gtk_window_set_wmclass(GTK_WINDOW (*window), "infoWindow", "megasenha"); 
+
+    gtk_widget_show_all(*window);
+
+    return 1;
+}
+
+void addItemsInitialWindow(InitialInterface *gui) {
+    // creates horizontal box to hold everything
+    GtkWidget *parentHbox;
+    parentHbox = gtk_hbox_new(FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (gui->window), parentHbox);
+
+    // adds timer, hints and input text boxes
+    //addGetNameTextBox(gui, parentHbox);
+}
+
+int updateInitialInterface()
+{
+    gtk_main_iteration();
+    return initialInterface.choice;
+}
+
+
+
