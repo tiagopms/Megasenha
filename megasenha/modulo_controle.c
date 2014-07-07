@@ -1,3 +1,14 @@
+/**Control the game.
+ /* 
+ *
+* @autor Douglas
+* @autor Isabella
+* @autor Thiago
+* @autor Tiago
+* @since 04/072014
+* @version 2.0
+ *
+ */
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
