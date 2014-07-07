@@ -252,6 +252,7 @@ void startAddWordWindow() {
     while(updateAddWordInterface()) {
         if(hasNewItemInAddWord()) {
             newItem = getNewWordAndHints();
+            insertNewWord(&newItem);
         }
     }
 }

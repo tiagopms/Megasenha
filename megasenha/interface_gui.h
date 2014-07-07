@@ -132,7 +132,7 @@ wordAndHints getNewWordAndHints();
     // functions for ranking window
     int initializeRankingWindow(GtkWidget **window);
     void addItemsRankingWindow(GtkWidget **window);
-    void addRankingEntry(GtkWidget *parentVbox, wordAndHints wordAndHintsItem);
+    void addRankingEntry(GtkWidget *parentVbox, Score score);
 
     // functions for add word window
     int initializeAddWordWindow(GtkWidget **window);

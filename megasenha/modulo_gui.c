@@ -1,5 +1,6 @@
 #include <gtk-2.0/gtk/gtk.h>
 #include "interface_palavra_e_dicas.h"
+#include "interface_armazenamento.h"
 #include <time.h>
 
 // structured used to be able to modify timer and hints and get player information at anytime
@@ -822,9 +823,9 @@ int initializeRankingWindow(GtkWidget **window) {
     gtk_window_set_title(GTK_WINDOW(*window), buf);
 
     // set size and position and connects close window with destroy function
-    gtk_window_set_default_size(GTK_WINDOW(*window), 597, 107);
+    gtk_window_set_default_size(GTK_WINDOW(*window), 547, 357);
     gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
-    gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 597/2, gdk_screen_height()/2);
+    gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 547/2, gdk_screen_height()/2 - 357/2);
     gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroyRankingWindow), NULL);
 
     // sets and creates icons for windows and tell windows manager not to put them together
@@ -844,8 +845,8 @@ void addItemsRankingWindow(GtkWidget **window) {
 
     // creates buttons frame
     GtkWidget *frame;
-    frame = gtk_frame_new("Choose one mode");
-    gtk_widget_set_size_request (frame, 390, 100);
+    frame = gtk_frame_new("Ranking entries");
+    gtk_widget_set_size_request (frame, 547, 350);
     gtk_box_pack_start(GTK_BOX(parentHbox), frame, FALSE, FALSE, 0);
 
     // creates horizontal box to hold the three buttons
@@ -854,23 +855,21 @@ void addItemsRankingWindow(GtkWidget **window) {
     gtk_container_add(GTK_CONTAINER(frame), rankingVbox);
 
     // adds ranking item
-    wordAndHints wordAndHintsItem;
-    wordAndHintsItem.word = "alal";
-    addRankingEntry(rankingVbox, wordAndHintsItem);
-    addRankingEntry(rankingVbox, wordAndHintsItem);
+    Ranking ranking = readRanking();
+    int i = 0;
+    for( i = 0 ; i < ranking.size ; i++) {
+        addRankingEntry(rankingVbox, *(ranking.scores + i) );
+    }
 }
 
-void addRankingEntry(GtkWidget *parentVbox, wordAndHints wordAndHintsItem) {
-    // creates horizontal box to hold the name and score
-//    GtkWidget *rankingHbox;
- //   rankingHbox = gtk_hbox_new(FALSE, 0);
- //   gtk_box_pack_start(GTK_BOX(parentVbox), rankingHbox, FALSE, FALSE, 0);
+void addRankingEntry(GtkWidget *parentVbox, Score score) {
     
     char buf[150];
-    sprintf(buf, "%s\t-\t%d", "oi", 300);
+    sprintf(buf, "<span foreground=\"blue\" font=\"20\">%s</span><span foreground=\"black\" font=\"20\">\t-\t</span><span foreground=\"red\" font=\"20\">%d</span>", score.name, score.score);
 
     // initializes it with name and score from buffer
-    GtkWidget *label = gtk_label_new (buf);
+    GtkWidget *label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), buf);
     gtk_box_pack_start(GTK_BOX(parentVbox), label, FALSE, FALSE, 0);
 }
 
@@ -921,7 +920,7 @@ int initializeAddWordWindow(GtkWidget **window) {
 }
 
 void addItemsAddWordWindow(AddWordInterface *gui) {
-    gui->newItem = 1;
+    gui->newItem = 0;
     gui->closed = 0;
     
     // creates horizontal box to hold everything
@@ -982,6 +981,7 @@ void addWordAndHints(GtkWidget *widget, gpointer data) {
     // simplify notation
     AddWordInterface *gui = (AddWordInterface *) data;
     int i = 0;
+    char difficulties[3] = {'f', 'm', 'd'};
     
     int index = gtk_combo_box_get_active( GTK_COMBO_BOX( gui->difficultyComboBox ) );
     printf("index= %d\n", index);
@@ -1006,9 +1006,12 @@ void addWordAndHints(GtkWidget *widget, gpointer data) {
     }
 
     wordAndHints wordAndHintsItem;
-    wordAndHintsItem.word = word;
+    wordAndHintsItem.word = (char *) malloc ( 50 * sizeof(char) );
+    wordAndHintsItem.dificulty = difficulties[index];
+    strcpy (wordAndHintsItem.word, word);
     for( i = 0 ; i < 3 ; i++ ) {
-        wordAndHintsItem.hints[i] = hints[i];
+        wordAndHintsItem.hints[i] = (char *) malloc ( 50 * sizeof(char) );
+        strcpy (wordAndHintsItem.hints[i], hints[i]);
     }
 
     gui->newItem = 1;
@@ -1037,6 +1040,14 @@ int hasNewItemInAddWord() {
 }
 
 wordAndHints getNewWordAndHints() {
-    addWordInterface.newItem = 1;
+    addWordInterface.newItem = 0;
+
+           printf("word2 = %s \n", (addWordInterface.newWordAndHints).word);
+        printf("diif = %c \n", (addWordInterface.newWordAndHints).dificulty);
+        printf("dica = %s \n", (addWordInterface.newWordAndHints).hints[0]);
+        printf("dica = %s \n", (addWordInterface.newWordAndHints).hints[1]);
+        printf("dica = %s \n", (addWordInterface.newWordAndHints).hints[2]);
+
+
     return addWordInterface.newWordAndHints;
 }

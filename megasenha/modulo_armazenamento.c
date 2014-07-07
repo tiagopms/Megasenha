@@ -4,14 +4,10 @@
 #include <time.h>
 #include "interface_palavra_e_dicas.h"
 
-typedef struct ScoreStruct {
-    char *name;
-    int score;
-} Score;
-typedef struct RankingStruct {
-    Score *scores;
+typedef struct PointerToWordStruct{
+    wordAndHints *words;
     int size;
-} Ranking;
+} PWordsAndHints;
 
 #define ARMAZENAMENTO_OWN
     #include "interface_armazenamento.h"
@@ -20,42 +16,42 @@ typedef struct RankingStruct {
 char *RANKING_FILE = "ranking.txt";
 
 /////////////////////////////////////////////////////////////////////////////////
-/* function to randomly select words for the first part of the game */ 
+/* function to randomly select words for the first part of the game */
 
 void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     static alreadyRandom = 0;
 
-    int i, j, counter=0; 
+    int i, j, counter=0;
     char temporaria[BUFSIZ];
     rewind(file);
-    i = countLines(); 
+    i = countLines();
     if(!alreadyRandom) {
-        srand(time(NULL)); 
+        srand(time(NULL));
         alreadyRandom = 1;
     }
     j=rand()%i;
 
-    for(counter=1;counter<j;counter++){ 
-        fgets(temporaria,BUFSIZ,file); 
-    } 
+    for(counter=1;counter<j;counter++){
+        fgets(temporaria,BUFSIZ,file);
+    }
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
     char temp[5];
-    fscanf(file,"%s", (newWordAndHint->word)); 
+    fscanf(file,"%s", (newWordAndHint->word));
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
     
-    // hints in random order 
+    // hints in random order
     i=3;
     j=rand()%i;
     int temp2 = j;
-    fscanf(file,"%s", (newWordAndHint->hints[j])); 
+    fscanf(file,"%s", (newWordAndHint->hints[j]));
     while(j == temp2) {
         j=rand()%i;
     }
-    fscanf(file,"%s", (newWordAndHint->hints[j])); 
+    fscanf(file,"%s", (newWordAndHint->hints[j]));
     if(j!=2 && temp2 != 2) {
         j = 2;
     } else { if(j!=1 && temp2 != 1) {
@@ -65,7 +61,7 @@ void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     }}
     fscanf(file,"%s", (newWordAndHint->hints[j]));
 
-//    printf("\na palavra e %s\n", newWordAndHint->word);
+// printf("\na palavra e %s\n", newWordAndHint->word);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -103,11 +99,11 @@ void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
     char temp[5];
-    fscanf(file,"%s", (newWordAndHint->word)); 
+    fscanf(file,"%s", (newWordAndHint->word));
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
-    fscanf(file,"%s", (newWordAndHint->hints[0])); 
-    fscanf(file,"%s", (newWordAndHint->hints[1])); 
+    fscanf(file,"%s", (newWordAndHint->hints[0]));
+    fscanf(file,"%s", (newWordAndHint->hints[1]));
     fscanf(file,"%s", (newWordAndHint->hints[2]));
 
 }
@@ -120,45 +116,43 @@ void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
     int i=0, k=0, j, counter=0;
     char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
     rewind(file);
-        do{
-            fscanf(file,"%s", word_temp);
-            fscanf(file,"%s", dificulty_temp);
-            fscanf(file,"%s", Hint1);
-            fscanf(file,"%s", Hint2);
-            fscanf(file,"%s", Hint3);
-               
-                if(dificulty_temp[0]==109){
-                    i++;
-           
-                              }
-                else{
-                     
-                    k++;
-                                  }
+    do{
+        fscanf(file,"%s", word_temp);
+        fscanf(file,"%s", dificulty_temp);
+        fscanf(file,"%s", Hint1);
+        fscanf(file,"%s", Hint2);
+        fscanf(file,"%s", Hint3);
 
-        }while(dificulty_temp[0]==102 || dificulty_temp[0]==109);//fim while
-        
-        rewind(file);
-        
-        j=rand()%i;
-        
-        for(counter=1;counter<k;counter++){
-            fgets(temporaria,BUFSIZ,file);
-            }
-        for(counter=1;counter<j;counter++){
-            fgets(temporaria,BUFSIZ,file);
-            }
+        if(dificulty_temp[0]==109){
+            i++;
+        }
+        else{
+            k++;
+        }
+
+    }while(dificulty_temp[0]==102 || dificulty_temp[0]==109);//fim while
+
+    rewind(file);
+
+    j=rand()%i;
+
+    for(counter=1;counter<k;counter++){
+        fgets(temporaria,BUFSIZ,file);
+    }
+    for(counter=1;counter<j;counter++){
+        fgets(temporaria,BUFSIZ,file);
+    }
                      
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
     char temp[5];
-    fscanf(file,"%s", (newWordAndHint->word)); 
+    fscanf(file,"%s", (newWordAndHint->word));
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
-    fscanf(file,"%s", (newWordAndHint->hints[0])); 
-    fscanf(file,"%s", (newWordAndHint->hints[1])); 
+    fscanf(file,"%s", (newWordAndHint->hints[0]));
+    fscanf(file,"%s", (newWordAndHint->hints[1]));
     fscanf(file,"%s", (newWordAndHint->hints[2]));
 }
 
@@ -173,56 +167,53 @@ void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
     rewind(file);
    
    
-        do{
-                   
-            fscanf(file,"%s", word_temp);
-            fscanf(file,"%s", dificulty_temp);
-            fscanf(file,"%s", Hint1);
-            fscanf(file,"%s", Hint2);
-            fscanf(file,"%s", Hint3);
+    do{
 
-                if(dificulty_temp[0]==100){
-                    i++;
-           
-                              }
-                if(dificulty_temp[0]==102){
-                     
-                    k++;
-                                  }
-                                  
-                
-                if (dificulty_temp[0]==109){
-                     
-                    l++;
-                                  }
+        fscanf(file,"%s", word_temp);
+        fscanf(file,"%s", dificulty_temp);
+        fscanf(file,"%s", Hint1);
+        fscanf(file,"%s", Hint2);
+        fscanf(file,"%s", Hint3);
 
-        }while(dificulty_temp[0]!=101);//fim while
-        
-        rewind(file);
-        
-        j=rand()%i;
+        if(dificulty_temp[0]==100){
+            i++;
+        }
+        if(dificulty_temp[0]==102){
+            k++;
+        }
 
-        for(counter=1;counter<=l;counter++){
-            fgets(temporaria,BUFSIZ,file);
-            }
-            
-        for(counter=1;counter<=k;counter++){
-            fgets(temporaria,BUFSIZ,file);
-            }
-        for(counter=1;counter<j;counter++){
-            fgets(temporaria,BUFSIZ,file);
-            }
+
+        if (dificulty_temp[0]==109){
+            l++;
+        }
+
+    }while(dificulty_temp[0]!=101);//fim while
+
+    rewind(file);
+
+    j=rand()%i;
+
+    for(counter=1;counter<=l;counter++){
+        fgets(temporaria,BUFSIZ,file);
+    }
+
+    for(counter=1;counter<=k;counter++){
+        fgets(temporaria,BUFSIZ,file);
+    }
+    for(counter=1;counter<j;counter++){
+        fgets(temporaria,BUFSIZ,file);
+    }
    
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
     char temp[5];
-    fscanf(file,"%s", (newWordAndHint->word)); 
+    fscanf(file,"%s", (newWordAndHint->word));
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
-    fscanf(file,"%s", (newWordAndHint->hints[0])); 
-    fscanf(file,"%s", (newWordAndHint->hints[1])); 
+    fscanf(file,"%s", (newWordAndHint->hints[0]));
+    fscanf(file,"%s", (newWordAndHint->hints[1]));
     fscanf(file,"%s", (newWordAndHint->hints[2]));
 }
 
@@ -230,8 +221,8 @@ void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
 /////////////////////////////////////////////////////////////////////////////////
 
 
-/*function to count the number of lines that owns the file. this function 
-help to generate a random number that is within the number of rows that have 
+/*function to count the number of lines that owns the file. this function
+help to generate a random number that is within the number of rows that have
 the file */
 
 int countLines()
@@ -243,31 +234,126 @@ int countLines()
   int number_lines = 0;
     
   while((character = fgetc(file)) != EOF){
-    exist_line = 1; 
+    exist_line = 1;
       
     if(character == '\n'){
-    
-      number_lines++;             
-    } 
+      number_lines++;
+    }
   }
   
- 
   if(exist_line)
     number_lines++;
   
- 
+  fclose(file);
+
   return number_lines;
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-//int NewWord(FILE*arquivo, ){
+int insertNewWord(wordAndHints *newWordAndHint){
+    int i, j, k;
+    int medium, hard;
+    FILE *file;
+
+    j = countLines();
+    j--;
+    int linesNum = j;
+
+    medium = 0;
+    hard = 0;
+
+    file = fopen("dicas_primeira_fase.txt","r");//Abre o arquivo para leitura
+
+    PWordsAndHints Pwords;
+
+    Pwords.words = (wordAndHints *) malloc ( (j + 1) * sizeof(wordAndHints));
+
+    for (i = 0; i < j ; i++) {
+        (Pwords.words + i)->word = (char *) malloc (50 * sizeof(char));
+        (Pwords.words + i)->hints[0] = (char *) malloc (50 * sizeof(char));
+        (Pwords.words + i)->hints[1] = (char *) malloc (50 * sizeof(char));
+        (Pwords.words + i)->hints[2] = (char *) malloc (50 * sizeof(char));
+
+        fscanf(file, "%s", (Pwords.words + i)->word);
+        fscanf(file, " %c", &( (Pwords.words + i)->dificulty ));
+        fscanf(file, "%s", (Pwords.words + i)->hints[0]);
+        fscanf(file, "%s", (Pwords.words + i)->hints[1]);
+        fscanf(file, "%s", (Pwords.words + i)->hints[2]);
+        
+        if( (Pwords.words + i)->dificulty == 'm'){
+            medium++;
+        }
+
+        if( (Pwords.words + i)->dificulty == 'd'){
+            hard++;
+        }
+    }
+    hard++;
+
+    fclose(file);
+
+    //palavra facil   
+    if( newWordAndHint->dificulty=='f') {  
+        for ( k = j - 1 ; k >= 0 ; k-- ) {
+            *(Pwords.words + k + 1) = *(Pwords.words + k);
+
+        }
+
+        *(Pwords.words + 0) = *newWordAndHint;
+
+        writeWordAndHint(Pwords, linesNum);   
+        return;
+    }
+
+    //palavra medio
+    if(newWordAndHint->dificulty == 'm'){
+
+        for ( k = j - 1 ; k >= ( j - medium - hard ) ; k-- ) {
+            *(Pwords.words + k + 1) = *(Pwords.words + k);
+        }
+
+        i = ( j - medium - hard );
+
+        *(Pwords.words + i) = *newWordAndHint;
+
+        writeWordAndHint(Pwords, linesNum);   
+        return;
+    }   
+
+    //palavrad dificil
+    if ( newWordAndHint->dificulty == 'd' ){
+
+        for ( k = j - 1 ; k >= ( j - hard ) ; k-- ) {
+            *(Pwords.words + k + 1) = *(Pwords.words + k);
+        }
+        i = ( j - hard );
+
+        *(Pwords.words + i) = *newWordAndHint;
+
+        writeWordAndHint(Pwords, linesNum);
+        return;
+    } 
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void writeWordAndHint(PWordsAndHints PWords, int linesNum) {
+    FILE *file;
+    int i;
+    file = fopen("dicas_primeira_fase.txt", "w");
+
+    linesNum++;
+    for( i = 0 ; i < linesNum ; i++ ) {
+        fprintf(file, "%s ", ( PWords.words + i )->word );
+        fprintf(file, "%c ", ( PWords.words + i )->dificulty);
+        fprintf(file, "%s ", ( PWords.words + i )->hints[0]);
+        fprintf(file, "%s ", ( PWords.words + i )->hints[1]);
+        fprintf(file, "%s\n", ( PWords.words + i )->hints[2]);
+    }
     
-    
-
-
-
-//}
+    fclose(file);
+}
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -289,8 +375,8 @@ Ranking readRanking() {
     Ranking ranking;
     int i;
     int size;
-	
-    fp=fopen(RANKING_FILE,"r");//Abre o arquivo para leitura e grava��o
+
+    fp=fopen(RANKING_FILE,"r");//Abre o arquivo para leitura
     
     size = getSizeOfRanking(fp);
     if(!size) {
