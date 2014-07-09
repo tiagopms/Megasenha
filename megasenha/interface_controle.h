@@ -1,7 +1,6 @@
-/**
- * Interface to the controle module.
+/**Interface to the controle module.
  * Declares functions public to the controle module (no private functions are present in this module).
- *
+/*
  * @autor Douglas
  * @autor Isabella
  * @autor Thiago
