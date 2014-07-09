@@ -94,7 +94,7 @@ void test_VerifycountLinesisWorking(void){
 void test_VerifyreadRankingisWorking(void){
     Ranking ranking;
     ranking = readRanking();
-    CU_ASSERT_TRUE(ranking==10)
+    CU_ASSERT_TRUE(ranking==10);
 }
 
 

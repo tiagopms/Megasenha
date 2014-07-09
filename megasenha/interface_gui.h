@@ -1,7 +1,7 @@
 /**
  * Interface to the gui module.
  * Declares functions public and private to the gui module.
-/*
+ *
  * @autor Douglas
  * @autor Isabella
  * @autor Thiago

@@ -2,7 +2,7 @@
  * Calls "interface_palavra_e_dicas.h"
  * Deals with all the functions that concerns the storage of the program
  * 
-/*
+ *
  * @autor Douglas
  * @autor Isabella
  * @autor Thiago
@@ -36,25 +36,26 @@ char *RANKING_FILE = "ranking.txt";/**<variable that holds the name of the file 
 */
 void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     static alreadyRandom = 0;
-
     int i, j, counter=0;
     char temporaria[BUFSIZ];
+    char temp[5];
+    int temp2;
+
     rewind(file);
     i = countLines();
     if(!alreadyRandom) {
-        srand(time(NULL));
+        srand( (unsigned int) time(NULL));
         alreadyRandom = 1;
     }
     j=rand()%i;
 
     for(counter=1;counter<j;counter++){
-        fgets(temporaria,BUFSIZ,file);
+        fgets(temporaria, (int) BUFSIZ, file);
     }
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
-    char temp[5];
     fscanf(file,"%s", (newWordAndHint->word)); /**<Reads the file and puts the word in the word field of the struct.*/
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0];
@@ -62,7 +63,8 @@ void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     /** <hints in random order .*/
     i=3;
     j=rand()%i;
-    int temp2 = j;
+
+    temp2 = j;
     fscanf(file,"%s", (newWordAndHint->hints[j])); /**<Reads the file and puts the first hint in the hint field of the struct.*/
     while(j == temp2) {
         j=rand()%i;
@@ -88,6 +90,7 @@ void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
 
     int i=0, j, counter=0;
     char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
+    char temp[5];
     rewind(file);
     
     dificulty_temp[0]=102;
@@ -106,14 +109,14 @@ void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
     rewind(file);
     j=rand()%i;
     for(counter=1;counter<j;counter++){
-        fgets(temporaria,BUFSIZ,file);
+        fgets(temporaria, (int) BUFSIZ, file);
     }
                      
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
-    char temp[5];
+
     fscanf(file,"%s", (newWordAndHint->word)); /**<Reads the file and puts the word in the word field of the struct.*/
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0]; /**<Puts the dificulty of the word (gotten from the file) in the dificulty field of the struct.*/
@@ -131,7 +134,9 @@ void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
 
     int i=0, k=0, j, counter=0;
     char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
+    char temp[5];
     rewind(file);
+
     do{
         fscanf(file,"%s", word_temp);
         fscanf(file,"%s", dificulty_temp);
@@ -153,17 +158,17 @@ void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
     j=rand()%i;
 
     for(counter=1;counter<k;counter++){
-        fgets(temporaria,BUFSIZ,file);
+        fgets(temporaria, (int) BUFSIZ, file);
     }
     for(counter=1;counter<j;counter++){
-        fgets(temporaria,BUFSIZ,file);
+        fgets(temporaria, (int) BUFSIZ, file);
     }
                      
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
-    char temp[5];
+
     fscanf(file,"%s", (newWordAndHint->word)); /**<Reads the file and puts the word in the word field of the struct.*/
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0]; /**<Puts the dificulty of the word (gotten from the file) in the dificulty field of the struct.*/
@@ -180,8 +185,8 @@ void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
 
     int i=0, k=0, l=0, j, counter=0;
     char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
+    char temp[5];
     rewind(file);
-   
    
     do{
 
@@ -210,21 +215,21 @@ void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
     j=rand()%i;
 
     for(counter=1;counter<=l;counter++){
-        fgets(temporaria,BUFSIZ,file);
+        fgets(temporaria, (int) BUFSIZ, file);
     }
 
     for(counter=1;counter<=k;counter++){
-        fgets(temporaria,BUFSIZ,file);
+        fgets(temporaria, (int) BUFSIZ, file);
     }
     for(counter=1;counter<j;counter++){
-        fgets(temporaria,BUFSIZ,file);
+        fgets(temporaria, (int) BUFSIZ, file);
     }
    
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[1] = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[2] = (char*) malloc(50*sizeof(char));
-    char temp[5];
+
     fscanf(file,"%s", (newWordAndHint->word)); /**<Reads the file and puts the word in the word field of the struct.*/
     fscanf(file,"%s", temp);
     newWordAndHint->dificulty = temp[0]; /**<Puts the dificulty of the word (gotten from the file) in the dificulty field of the struct.*/
@@ -262,26 +267,27 @@ int countLines()
 }
 
 /** 
- * Function integer insertNewWord
+ * Function void insertNewWord
  * Function that inserts a new word (with its hints and difficulty) in the corret position in the file, so this word might be picked in future games
 */
-int insertNewWord(wordAndHints *newWordAndHint){
+void insertNewWord(wordAndHints *newWordAndHint){
     int i, j, k;
     int medium, hard;
     FILE *file;
+    int linesNum;
+    PWordsAndHints Pwords; /**<Variable that holds all words and hints already present in file to be rewritten later.*/
 
     j = countLines();
     j--;
-    int linesNum = j;
+    linesNum = j;
 
     medium = 0;
     hard = 0;
 
     file = fopen("dicas_primeira_fase.txt","r"); /**<Opens the file with words to be read.*/
 
-    PWordsAndHints Pwords; /**<Variable that holds all words and hints already present in file to be rewritten later.*/
-
     Pwords.words = (wordAndHints *) malloc ( (j + 1) * sizeof(wordAndHints));
+    Pwords.size = j + 1;
 
     for (i = 0; i < j ; i++) {
         (Pwords.words + i)->word = (char *) malloc (50 * sizeof(char));
@@ -313,7 +319,7 @@ int insertNewWord(wordAndHints *newWordAndHint){
             *(Pwords.words + k + 1) = *(Pwords.words + k);
         }
 
-        *(Pwords.words + 0) = *newWordAndHint;
+        *(Pwords.words) = *newWordAndHint;
 
         writeWordAndHint(Pwords, linesNum);   
         return;
@@ -377,9 +383,10 @@ void writeWordAndHint(PWordsAndHints PWords, int linesNum) {
 void ranking (int record, char *name)
 {
     Ranking ranking;
+    Score newScore; 
     ranking = readRanking(); /**<Reads the current ranking file with names and points and saves them in a Ranking structure.*/
     
-    Score newScore = fromNameAndPointsToScore(record, name);
+    newScore = fromNameAndPointsToScore(record, name);
     insertNewScoreInRanking(&ranking, newScore); /**<Inserts new score in the Ranking structure (new name and point). Only inserts it if points are bigger than current worse in the ranking, or if there are less than 10 names in the ranking.*/
     
     writeRanking(ranking); /**<Writes new ranking scores to file.*/
@@ -402,6 +409,7 @@ Ranking readRanking() {
     size = getSizeOfRanking(fp); /**<Gets the size of the ranking through the call of the function getSizeOfRanking.*/
     if(!size) {
         ranking.size = 0;
+        ranking.scores = NULL;
         return ranking; /**<If size is 0, no current ranking entries, return empty Ranking, with size set to 0.*/
     }
     
@@ -469,17 +477,17 @@ void writeRanking(Ranking ranking) {
  * Function void insertNewScoreInRanking
  * Function that receives a ranking and a new score (name and respective point) and adds this new score in the correct position in the ranking. If the score is worse than all in ranking, and the ranking is already full (has ten entries) don't add it. 
 */
-void insertNewScoreInRanking(Ranking *ranking, Score newScore) {
+void insertNewScoreInRanking(/*@out@*/ Ranking *ranking, Score newScore) {
+    int i = 0;
+    int j = 0;
+    int increaseSize = 0;
+
     if (ranking->size == 0) {
         ranking->scores = (Score *) malloc( sizeof(Score) );
         *(ranking->scores) = newScore;
         ranking->size++;
         return;
     }
-    
-    int i = 0;
-    int j = 0;
-    int increaseSize = 0;
     
     while( ( i < ranking->size ) && ( (ranking->scores + i)->score > newScore.score ) ) {
         i++;

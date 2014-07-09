@@ -3,7 +3,7 @@
  * Implements all the functions to control the game (first or second round).
  * Also controls the mode of the program being used (play game, view ranking, or add new word to "database").
  * 
-/*
+ *
  * @autor Douglas
  * @autor Isabella
  * @autor Thiago
@@ -29,12 +29,13 @@ const static int GIVE_UP_TIME = 3; /**<Constant that represents, in seconds, tim
  */
 int iniciaPrimeiraFase(int *score) {
   
-    int primeiraIteracao = 1, pntPlayer1=0,pntPlayer2=0;
+    int pntPlayer1=0,pntPlayer2=0;
     int dicas[2]= {0,0}, i=0, j=0;
-    int rodada = 0, playerVencedor=1, flag =0, inicial =1;
+    int rodada = 0, flag =0;
     char buf [150];
     int playerTurn = 0; /**<Variable has 0 value when player one's turn, and 1 when player two.*/
     FILE *arquivo;
+    wordAndHints newWordAndHint;
 
     if((arquivo = fopen("dicas_primeira_fase.txt","r")) == NULL)
     {
@@ -42,13 +43,13 @@ int iniciaPrimeiraFase(int *score) {
         exit(1);
     }
 
-    wordAndHints newWordAndHint;
     startInterface(2, 1); /**<Starts interface for two players.*/
     updateInterface();
     sleep(1);
     updateInterface(); /**<Updates interface.*/
     sleep(1);
     while (rodada < 6) {  /**<While still in first three turns of any of two players.*/
+        int playerScore;
         updatePlayerLabel(playerTurn+1); /**<Sets player who is playing in info window.*/
         
         getWordFirstRound(arquivo, &(newWordAndHint)); /**<Gets new word for this next round.*/
@@ -59,7 +60,7 @@ int iniciaPrimeiraFase(int *score) {
             }
         }
         
-        int playerScore = getPlayerScore(playerTurn+1); /**<if player score is -1 he didn't get the answer else, gets the number of hints used.*/
+        playerScore = getPlayerScore(playerTurn+1); /**<if player score is -1 he didn't get the answer else, gets the number of hints used.*/
         if (playerScore != -1) {
             dicas[j]= dicas[j] + (4 - playerScore); /**<if player got the answer, update his score.*/
         } else {
@@ -141,29 +142,29 @@ int iniciaPrimeiraFase(int *score) {
  * Controls and runs the second round, openning the interface and controlling the score and how many words player already got.
  */
 void iniciaSegundaFase(int playerVencedor, int scoreFirstRound){
-    int primeiraIteracao = 1, pntPlayer1=0,pntPlayer2=0;
-    int dicas[2], i=0,j=0;
     char buf[150];
     int etapa = 0;
-    int playerTurn = 0, flag = 0;
-    char resposta;
+    int flag = 0;
     int perdeu = 0;
     int pontosFinais[9] = {0, 10, 100, 500, 1000, 5000, 10000, 500000, 1000000};
+    char *name;
 
     FILE *arquivo; /**<File with words, dificulties and hints.*/
+    wordAndHints newWordAndHint;
 
     if((arquivo = fopen("dicas_primeira_fase.txt","r")) == NULL) {
         printf("Erro ao abrir arquivo!!!\n");
         exit(1);
     }
 
-    wordAndHints newWordAndHint;
     updatePlayerLabel(playerVencedor); /**<Sets player who is playing in info window.*/
     startInterface(1, playerVencedor); /**<Starts interface for only one player, the one that won first round.*/
 
     while (etapa<9 && flag==0) { /**<Runs game until player has beaten all 8 words or given up.*/
         while (updateInterface()) { /**<Continues running the game unless interface has been closed abruptly by user.*/
             if(!waitingPlayer()) { /**<Waits in loop until player has answered or gotten wrong answer, or time has ended. After this enters in this if to get answer information.*/
+                int sleepCounter = 0;
+
                 //printf("Deseja parar e ganhar seus pontos?");
                 etapa++; /**<Sets player to be in next turn.*/
 
@@ -193,7 +194,7 @@ void iniciaSegundaFase(int playerVencedor, int scoreFirstRound){
                 sprintf(buf, "Aperte give up para manter seus pontos atuais\n%d", pontosFinais[etapa-1] * scoreFirstRound);
                 updateInfoLabel (buf, "blue"); /**<Tell player he can give up to keep current score.*/
                 updateInterface();
-                int sleepCounter = 0;
+
                 for (sleepCounter = 0 ; sleepCounter < GIVE_UP_TIME ; sleepCounter++) { /**<Wait for player to give up if he wants.*/
                     sleep(1);
                     updateInterface();
@@ -244,7 +245,7 @@ void iniciaSegundaFase(int playerVencedor, int scoreFirstRound){
 
     // get winner's name
     while (updateGetName()); /**<Wait for player to write his name.*/
-    char *name = getName(); /**<Get player's name.*/
+    name = getName(); /**<Get player's name.*/
 
     ranking(pontosFinais[etapa-1] * scoreFirstRound, name); /**<Write new score to ranking.*/
 
@@ -257,8 +258,8 @@ void iniciaSegundaFase(int playerVencedor, int scoreFirstRound){
  * Returns program mode chosen by user.
  */
 int startMainWindow(int argc, char *argv[]) {
-    startMainInterface(argc, argv); /**<Starts main program window.*/
     int choice = 0;
+    startMainInterface(argc, argv); /**<Starts main program window.*/
     
     while(!choice) { /**<Waits for player to choose an option.*/
         choice = updateMainInterface(); /**<Gets mode user has chosen to run program (game, view ranking, or add word), or 0 if he hasn't chosen yet.*/

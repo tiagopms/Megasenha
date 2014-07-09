@@ -8,16 +8,16 @@
 *
 *
 */
+
 #include "interface_palavra_e_dicas.h"
 #include "interface_gui.h"
 #include "interface_controle.h"
 
 int main(int argc, char *argv[]) {
     int choice;
+    int playerVencedor = 1; /** < Integer of the nunber of the winner player.*/
+    int scoreFirstRound = 0; //!< Integer of the score of the first round
     choice = startMainWindow(argc, argv);
-    
-    int playerVencedor = 1;//!< Integer of the nunber of the winner player
-    int scoreFirstRound = 0;//!< Integer of the score of the first round
 
     switch(choice) {
         case GUI_GAME:
@@ -42,8 +42,3 @@ int main(int argc, char *argv[]) {
             break;
     }
 }
-
-// TODO: word can be called two times
-// TODO: give more time to give up
-// TODO: merge with DoxyGen comments and documentation
-// TODO: create static tests

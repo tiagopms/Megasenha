@@ -1,7 +1,7 @@
 /**
  * Interface to the armazenamento module.
  * Declares functions public and private to the armazenamento module.
-/*
+ *
  * @autor Douglas
  * @autor Isabella
  * @autor Thiago
@@ -23,6 +23,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<time.h>
+#include "interface_palavra_e_dicas.h"
 
 typedef struct ScoreStruct {/** <struct that holds the values for the name and the score of the players.*/
     char *name;
@@ -34,7 +35,7 @@ typedef struct RankingStruct {/** <struct that contains the score and the number
     int size; 
 } Ranking; 
 
-void getWordFirstRound(FILE*arquivo, wordAndHints *newWordAndHint);
+void getWordFirstRound(FILE *arquivo, wordAndHints *newWordAndHint);
 
 void getWordSecondRoundEasy(FILE*arquivo, wordAndHints *newWordAndHint);
 
@@ -44,7 +45,7 @@ void getWordSecondRoundHard(FILE*arquivo, wordAndHints *newWordAndHint);
 
 int countLines();
 
-int insertNewWord(wordAndHints *newWordAndHint);
+void insertNewWord(wordAndHints *newWordAndHint);
 
 void ranking (int recorde, char *name);
 

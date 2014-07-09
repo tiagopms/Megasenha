@@ -5,7 +5,7 @@
  * 
  * Library used for creating windows is gtk-2.0/gtk/gtk.h
  * Calls "interface_palavra_e_dica.h"
-/* 
+ * 
  * @autor Douglas
  * @autor Isabella
  * @autor Thiago
@@ -14,6 +14,8 @@
  * @version 2.0
  * 
  */
+
+#ifndef S_SPLINT_S
 
 #include <gtk-2.0/gtk/gtk.h>
 #include "interface_palavra_e_dicas.h"
@@ -1151,3 +1153,5 @@ wordAndHints getNewWordAndHints() {
 
     return addWordInterface.newWordAndHints;
 }
+
+#endif
