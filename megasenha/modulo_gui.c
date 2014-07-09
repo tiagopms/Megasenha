@@ -1,10 +1,10 @@
-/**
- * Creates windows so user can interact whith the game
+/**Creates windows so user can interact whith the game
  * GUI module (Graphical User Interface)
  * Implements all the functions to control the interface.
  * 
  * Library used for creating windows is gtk-2.0/gtk/gtk.h
  * Calls "interface_palavra_e_dica.h"
+/*
  * 
  * @autor Douglas
  * @autor Isabella
