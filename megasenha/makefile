@@ -26,3 +26,7 @@ clean:
 
 splint:
 	splint *.h modulo_gui.c modulo_armazenamento.c modulo_controle.c main.c -weak +infloops +compdef +sysdirerrors -warnposix -unrecog -bufferoverflowhigh
+
+testes: teste_armazenamento.c
+	gcc teste_armazenamento.c -lcunit -o testes
+	./testes
