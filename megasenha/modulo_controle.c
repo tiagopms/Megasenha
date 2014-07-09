@@ -3,10 +3,10 @@
  * Also controls the mode of the program being used (play game, view ranking, or add new word to "database").
 /* 
  *
- * @autor Douglas
- * @autor Isabella
- * @autor Thiago
- * @autor Tiago
+ * @author Douglas
+ * @author Isabella
+ * @author Thiago
+ * @author Tiago
  * @since 04/07/2014
  * @version 2.0
  *
