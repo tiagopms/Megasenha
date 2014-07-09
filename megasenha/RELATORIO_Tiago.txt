@@ -45,3 +45,20 @@
 |       |                  |Controle    |Melhorei o controle da segunda     |
 |       |                  |            |parte do jogo                      |
 -----------------------------------------------------------------------------
+|04/07  |     5:00         |Adicionar   |Adicionei interface inicial ao jogo|
+|       |                  |novos       |que permite a escolha entre modos  |
+|       |                  |requisitos  |de uso do program (view ranking,   |
+|       |                  |            |play game, add new word)           |
+-----------------------------------------------------------------------------
+|06/07  |    12:00         |Adicionar   |Criei    gui    para ver o ranking |
+|       |                  |novos       |e para adicionar novas palavras    |
+|       |                  |requisitos  |e ajudei o Douglas a criar as fun- |
+|       |                  |            |coes de armazenamento relacionadas |
+|       |                  |            |a essas funcionalidades            |
+-----------------------------------------------------------------------------
+|08/07  |     5:00         |Documentar  |Passei a limpo a documentacao dos  |
+|       |                  |via         |modulos gui e armazenamento ja fei-|
+|       |                  |Doxygen     |tas, adicionei novos comentarios e |
+|       |                  |            |novas informacoes.  Documentei o   |
+|       |                  |            |modulo de controle e as interfaces |
+-----------------------------------------------------------------------------
