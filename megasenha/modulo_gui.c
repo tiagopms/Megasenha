@@ -6,10 +6,10 @@
  * Calls "interface_palavra_e_dica.h"
 /*
  * 
- * @autor Douglas
- * @autor Isabella
- * @autor Thiago
- * @autor Tiago
+ * @author Douglas
+ * @author Isabella
+ * @author Thiago
+ * @author Tiago
  * @since 04/072014
  * @version 2.0
  * 
