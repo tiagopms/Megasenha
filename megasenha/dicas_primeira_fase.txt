@@ -31,6 +31,7 @@ goleiro m futebol taffarel maos
 egito m pais piramide farao
 almocar m fome jantar antes
 bonsai m planta pequena japones
+nova d nova nova nova
 hardFuckingWord d lala mfmfm ciiviv
 kriptonita d pedra verde heroi
 tatuagem d corpo marca estudio
