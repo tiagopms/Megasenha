@@ -1,7 +1,6 @@
-/**
- * Calls "interface_palavra_e_dicas.h"
+/**Calls "interface_palavra_e_dicas.h"
  * Deals with all the functions that concerns the storage of the program
- * 
+/* 
  *
  * @autor Douglas
  * @autor Isabella
