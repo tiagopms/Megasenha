@@ -1,7 +1,6 @@
-/**
- * Interface to the armazenamento module.
+/**Interface to the armazenamento module.
  * Declares functions public and private to the armazenamento module.
- *
+/*
  * @autor Douglas
  * @autor Isabella
  * @autor Thiago
