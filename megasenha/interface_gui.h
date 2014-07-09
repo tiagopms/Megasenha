@@ -1,3 +1,16 @@
+/**
+ * Interface to the gui module.
+ * Declares functions public and private to the gui module.
+/*
+ * @autor Douglas
+ * @autor Isabella
+ * @autor Thiago
+ * @autor Tiago
+ * @since 04/07/2014
+ * @version 2.0
+ *
+ */
+
 #ifndef GUI_HPP
 #define GUI_HPP
 

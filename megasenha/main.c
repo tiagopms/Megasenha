@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     }
 }
 
-// TODO: add interface to add new words
-// TODO: interface to see ranking
 // TODO: word can be called two times
 // TODO: give more time to give up
+// TODO: merge with DoxyGen comments and documentation
+// TODO: create static tests

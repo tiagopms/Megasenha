@@ -1,3 +1,16 @@
+/**
+ * Interface to the armazenamento module.
+ * Declares functions public and private to the armazenamento module.
+/*
+ * @autor Douglas
+ * @autor Isabella
+ * @autor Thiago
+ * @autor Tiago
+ * @since 04/072014
+ * @version 2.0
+ *
+ */
+
 #ifndef INTERFACE_ARMAZENAMENTO_H
 #define INTERFACE_ARMAZENAMENTO_H
 #ifdef INTERFACE_ARMAZENAMENTO_SERVIDOR
@@ -11,25 +24,40 @@
 #include<string.h>
 #include<time.h>
 
-void primeira_fase(FILE*arquivo, wordAndHints *newWordAndHint);
+typedef struct ScoreStruct {/** <struct that holds the values for the name and the score of the players.*/
+    char *name;
+    int score;
+} Score;
 
-void segunda_fase_facil(FILE*arquivo, wordAndHints *newWordAndHint);
+typedef struct RankingStruct {/** <struct that contains the score and the number of players.*/
+    Score *scores;
+    int size; 
+} Ranking; 
 
-void segunda_fase_medio(FILE*arquivo, wordAndHints *newWordAndHint);
+void getWordFirstRound(FILE*arquivo, wordAndHints *newWordAndHint);
 
-void segunda_fase_dificil(FILE*arquivo, wordAndHints *newWordAndHint);
+void getWordSecondRoundEasy(FILE*arquivo, wordAndHints *newWordAndHint);
 
-int contar_linhas();
+void getWordSecondRoundMedium(FILE*arquivo, wordAndHints *newWordAndHint);
+
+void getWordSecondRoundHard(FILE*arquivo, wordAndHints *newWordAndHint);
+
+int countLines();
+
+int insertNewWord(wordAndHints *newWordAndHint);
 
 void ranking (int recorde, char *name);
 
+Ranking readRanking();
+
 int getSizeOfRanking(FILE *fp);
 
-// declare functions intern to armazenamento module
+// declare functions only used in armazenamento module
 #ifdef ARMAZENAMENTO_OWN
-    Ranking readRanking();
+    void writeWordAndHint(PWordsAndHints Pwords, int linesNum);
+
     void writeRanking(Ranking ranking);
-    void insertNewScoreInRanking(Ranking &ranking, Score newScore);
+    void insertNewScoreInRanking(Ranking *ranking, Score newScore);
     Score fromNameAndPointsToScore(int points, char *name);
 #endif
 

@@ -1,10 +1,26 @@
+/**
+ * Creates windows so user can interact whith the game
+ * GUI module (Graphical User Interface)
+ * Implements all the functions to control the interface.
+ * 
+ * Library used for creating windows is gtk-2.0/gtk/gtk.h
+ * Calls "interface_palavra_e_dica.h"
+/* 
+ * @autor Douglas
+ * @autor Isabella
+ * @autor Thiago
+ * @autor Tiago
+ * @since 04/072014
+ * @version 2.0
+ * 
+ */
+
 #include <gtk-2.0/gtk/gtk.h>
 #include "interface_palavra_e_dicas.h"
 #include "interface_armazenamento.h"
 #include <time.h>
 
-// structured used to be able to modify timer and hints and get player information at anytime
-typedef struct InterfaceStruct {
+typedef struct InterfaceStruct { /** <Structure used to be able to modify timer and hints and get player information at anytime.*/
     int player;
     GtkWidget *window;
     GtkWidget *timerLabel;
@@ -19,7 +35,7 @@ typedef struct InterfaceStruct {
     int waitingForAnswer;
 } Interface;
 
-typedef struct InfoInterfaceStruct {
+typedef struct InfoInterfaceStruct { /** <Structure used to be able to show information strings to player. This info can be strings, or the number player whose turn it is.*/
     int player;
     GtkWidget *window;
     GtkWidget *buttonAndPlayerHbox;
@@ -27,7 +43,7 @@ typedef struct InfoInterfaceStruct {
     GtkWidget *infoLabel;
 } InfoInterface;
 
-typedef struct GetNameInterfaceStruct {
+typedef struct GetNameInterfaceStruct { /** <Structure used to be hold the get name window used to get player's name for the ranking.*/
     GtkWidget *window;
     GtkWidget *inputTextBox;
 
@@ -35,13 +51,13 @@ typedef struct GetNameInterfaceStruct {
     char *name;
 } GetNameInterface;
 
-typedef struct MainInterfaceStruct {
+typedef struct MainInterfaceStruct { /** <Structure used to be hold the main window and which program mode was chosen.*/
     GtkWidget *window;
 
     int choice;
 } MainInterface;
 
-typedef struct AddWordInterfaceStruct {
+typedef struct AddWordInterfaceStruct { /** <Structure used to be hold the add word window used when program in add word mode to get new word, hints and difficulty.*/
     GtkWidget *window;
 
     GtkWidget *wordTextBox;
@@ -59,24 +75,27 @@ typedef struct AddWordInterfaceStruct {
 #undef GUI_OWN
 
 // vector that holds information about open GUIs
-static Interface interfaces[2];
-static int numberOfPlayers;
-static int playerPlaying = 0;
-static InfoInterface infoInterface;
-static GetNameInterface getNameInterface;
-static MainInterface mainInterface;
-static AddWordInterface addWordInterface;
-static int rankingWindowClosed = 0;
+static Interface interfaces[2]; /** <Vector that holds information about open game GUIs (individual player's GUIs).*/
+static int numberOfPlayers; /** <Integer of number of players playing round.*/
+static int playerPlaying = 0; /** <Integer of player whose round it is.*/
+static InfoInterface infoInterface; /** <Information window.*/
+static GetNameInterface getNameInterface; /** <Get name window.*/
+static MainInterface mainInterface; /** <Main window.*/
+static AddWordInterface addWordInterface; /** <Add word window.*/
+static int rankingWindowClosed = 0; /** <Boolean representing if ranking was closed.*/
 
-// closing program control variables
-static quitApplication = 0;
-static stopTimeOuts[2] = {0, 0};
-static int playerGaveUp = 0;
+/** <Closing program control variables.*/
+static quitApplication = 0; /** <Variable representing if game was closed.*/
+static stopTimeOuts[2] = {0, 0}; /** <Variable used to stop timers in game when game windows are closed.*/
+static int playerGaveUp = 0; /** <Variable representing if a player gave up.*/
 
-// if window closed abruptly print that player surrendered and quit program
+/**
+ * Function void destroy
+ *
+ * If window closed abruptly print that player surrendered and quit program.
+ */
 void destroy(GtkWidget *widget, gpointer data) {
-    // if application closed abruptly
-    if(!quitApplication) {
+    if(!quitApplication) { /** <If application closed abruptly.*/
         g_print ("Player %s surrendered (closed application)\n", (char *) data);
         quitApplication = 1;
     }
@@ -84,75 +103,82 @@ void destroy(GtkWidget *widget, gpointer data) {
     stopTimeOuts[1] = 1;
 }
 
+/**
+ * Function integer startInterface
+ *
+ * Starts all in game interface (info window and players windows).
+ */
 int startInterface(int nPlayers, int playerToPlay) {
-    // creates windows for all players
-    if(nPlayers == 2) {
-        createInfoWindow(&infoInterface);
+    if(nPlayers == 2) { /** <Creates windows for all players.*/
+        createInfoWindow(&infoInterface); /** <Creates info window.*/
 
         sleep(1);
-        createWindow(&interfaces[0], 1);
-        createWindow(&interfaces[1], 2);
+        createWindow(&interfaces[0], 1); /** <Creates window for player 1.*/
+        createWindow(&interfaces[1], 2); /** <Creates window for player 2.*/
     } else {
-        // if only one window, set correct one
-        createWindow(&interfaces[playerToPlay-1], playerToPlay);
-        playerPlaying = playerToPlay;
+        createWindow(&interfaces[playerToPlay-1], playerToPlay); /** <If only one window, open correct one.*/
+        playerPlaying = playerToPlay; /** <Set player who is playing.*/
     }
 
-    // saves number of players
-    numberOfPlayers = nPlayers;
+    numberOfPlayers = nPlayers; /** <Saves number of players.*/
 
     return 1;
 }
 
+/**
+ * Function void closeInterface
+ *
+ * Closes players game interfaces.
+ */
 void closeInterface() {
     quitApplication = 1;
      // if window hasn't been closed, close it
-    if (interfaces[0].window != NULL && GTK_IS_WIDGET(interfaces[0].window)) {
+    if (interfaces[0].window != NULL && GTK_IS_WIDGET(interfaces[0].window)) { /** <If window hasn't been closed, close it.*/
         gtk_widget_destroy(interfaces[0].window);
     }
-    if (interfaces[1].window != NULL && GTK_IS_WIDGET(interfaces[1].window)) {
+    if (interfaces[1].window != NULL && GTK_IS_WIDGET(interfaces[1].window)) { /** <If window hasn't been closed, close it.*/
         gtk_widget_destroy(interfaces[1].window);
     }
 
-    // allow application to be restarted
-    quitApplication = 0;
+    quitApplication = 0; /** <Allow application to be restarted (for second round maybe).*/
     stopTimeOuts[0] = 1;
     stopTimeOuts[1] = 1;
     numberOfPlayers = 0;
 }
 
+/**
+ * Function integer createWindow
+ *
+ * Creates player game window.
+ */
 int createWindow(Interface *gui, int player) {
-    // initializes player conditions
-    gui->player = player;
+    gui->player = player; /** <Initializes player conditions.*/
     gui->waitingForAnswer = FALSE;
     gui->gotCorrectAnswer = FALSE;
 
-    // intializes blank window
-    initializeWindow(&(gui->window), player);
-    // adds items to window
-    addItemsToWindow(gui);
-    // shows everything in window
-    gtk_widget_show_all(gui->window);
+    initializeWindow(&(gui->window), player); /** <Intializes blank window.*/
+    addItemsToWindow(gui); /** <Adds items to window.*/
+    gtk_widget_show_all(gui->window); /** <Shows everything in window.*/
 }
 
-// initiate player's window
+/**
+ * Function integer initializeWindow
+ *
+ * Initializes player's window
+ */
 int initializeWindow(GtkWidget **window, int player) {
-    // if not valid player, raise error
-    if (player != 1 && player != 2) {
+    if (player != 1 && player != 2) { /** <If not valid player, raise error.*/
         printf("Error, invalid player number window opened\n");
         return 0;
     }
 
-    // initialize window
-    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL); /** <Initialize window.*/
 
-    // set title
     char buf[50];
     sprintf(buf, "megasenha - player %d", player);
-    gtk_window_set_title(GTK_WINDOW(*window), buf);
+    gtk_window_set_title(GTK_WINDOW(*window), buf); /** <Set window's title.*/
 
-    // set size and position and connects close window with destroy function
-    gtk_window_set_default_size(GTK_WINDOW(*window), 597, 177);
+    gtk_window_set_default_size(GTK_WINDOW(*window), 597, 177); /** <Set size and position and connects close window with destroy function.*/
     gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
     if(player == 1) {
         gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()*1/10, gdk_screen_height()/2 - 150);
@@ -162,8 +188,7 @@ int initializeWindow(GtkWidget **window, int player) {
         gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroy), (gpointer) "2");
     }
 
-    // sets and creates icons for windows and tell windows manager not to put them together
-    sprintf(buf, "p%d.png", player);
+    sprintf(buf, "p%d.png", player); /** <Creates and sets icons for window and tells windows manager not to put them together.*/
     gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf(buf));
     sprintf(buf, "player %d", player);
     gtk_window_set_wmclass(GTK_WINDOW (*window), buf, "megasenha"); 
@@ -171,7 +196,10 @@ int initializeWindow(GtkWidget **window, int player) {
     return 1;
 }
 
-// generates icon image used by window for task bar
+/** Function createPixbuf
+ *
+ * Generates icon image used by window for task bar.
+ */ 
 GdkPixbuf *createPixbuf(const gchar * filename)
 {
     GdkPixbuf *pixbuf;
@@ -185,118 +213,126 @@ GdkPixbuf *createPixbuf(const gchar * filename)
     return pixbuf;
 }
 
+/**
+ * Function void addItemsToWindow
+ *
+ * Adds items to player's window (buttons, labels, etc..).
+ */
 void addItemsToWindow(Interface *gui) {
-    // creates vertical box to hold everything
-    GtkWidget *parentVbox;
+    GtkWidget *parentVbox; /** <Creates vertical box to hold everything.*/
     parentVbox = gtk_vbox_new(FALSE, 0);
     gtk_container_add (GTK_CONTAINER (gui->window), parentVbox);
 
-    // creates horizontal box to hold timer and hints
-    GtkWidget *timerHintsHbox;
+    GtkWidget *timerHintsHbox; /** <Creates horizontal box to hold timer and hints.*/
     timerHintsHbox = gtk_hbox_new(FALSE, 0);
     gtk_box_pack_start(GTK_BOX(parentVbox), timerHintsHbox, FALSE, FALSE, 0);
 
-    // adds timer, hints and input text boxes
-    addTimer(&(gui->timerLabel), timerHintsHbox);
+    addTimer(&(gui->timerLabel), timerHintsHbox); /** <Adds timer, hints and input text boxes.*/
     addHints(gui, timerHintsHbox);
     addTextBox(gui, parentVbox);
 }
 
+/**
+ * Function void addTimer
+ *
+ * Adds a timer to a hbox.
+ */
 void addTimer(GtkWidget **label, GtkWidget *parentHbox) {
-    // creates timer frame
-    GtkWidget *frame;
+    GtkWidget *frame; /** <Creates timer frame.*/
     frame = gtk_frame_new("Timer");
     gtk_widget_set_size_request (frame, 100, 100);
     gtk_box_pack_start(GTK_BOX(parentHbox), frame, FALSE, FALSE, 0);
 
-    // initializes it with word "Stopped"
-    *label = gtk_label_new ("Stopped");
+    *label = gtk_label_new ("Stopped"); /**<Initializes it with word "Stopped".*/
     gtk_container_add (GTK_CONTAINER (frame), *label);
 }
 
+/**
+ * Function void addTimer
+ *
+ * Adds a hints field to a hbox.
+ */
 void addHints(Interface *gui, GtkWidget *parentHbox) {
-    //creates frame to hold hints
-    GtkWidget *frame;
+    GtkWidget *frame; /** <Creates frame to hold hints.*/
     frame = gtk_frame_new("Hints");
     gtk_box_pack_start(GTK_BOX(parentHbox), frame, TRUE, TRUE, 0);
 
-    // creates vertical box to align three hints
-    GtkWidget *vbox;
+    GtkWidget *vbox; /** <Creates vertical box to align three hints.*/
     vbox = gtk_vbox_new(FALSE, 0);
     gtk_container_add (GTK_CONTAINER (frame), vbox);
 
-    // writes "no hints yet" in three labels
-    int i;
+    int i; /** <Writes "no hints yet" in three labels.*/
     for(i=0; i<3; i++) {
         gui->hintsLabel[i] = gtk_label_new ("No hints yet");
         gtk_box_pack_start(GTK_BOX(vbox), gui->hintsLabel[i], TRUE, TRUE, 0);
     }
 }
 
-// adds input text box to window
+/**
+ * Function void addTextBox
+ *
+ * Adds input text box to window
+ */
 void addTextBox(Interface *gui, GtkWidget *parentVbox) {
-    // generates vertical box that holds items
-    GtkWidget *vbox;
+    GtkWidget *vbox; /** <Generates vertical box that holds items.*/
     vbox = gtk_vbox_new(FALSE, 0);
     gtk_box_pack_start(GTK_BOX(parentVbox), vbox, FALSE, FALSE, 0);
 
-    //generates input box frame
-    GtkWidget *frame;
+    GtkWidget *frame; /**<Generates input box frame.*/
     frame = gtk_frame_new ("Write word");
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-    //create input box
-    createTextBox(gui, frame);
+    createTextBox(gui, frame); /** <Create input box.*/
 }
 
+/**
+ * Funtion void sendText
+ * Callback function related to text box in game window that captures words the player tryied to guess.
+ * Tests if player got the correct word and if not calls functions to show next hint.
+ */
 void sendText(GtkWidget *widget, gpointer data)
 {
-    // simplify notation
-    Interface *gui = (Interface *) data;
+    Interface *gui = (Interface *) data; /** <Simplify notation.*/
     int numberOfHints = gui->numberOfHints;
-    // if already 3 hints over or time done do nothing
-    if(numberOfHints > 3 || !gui->waitingForAnswer) {
+    
+    if(numberOfHints > 3 || !gui->waitingForAnswer) { /** <If already 3 hints over or time done do nothing.*/
         return;
     }
 
-    // get answer from entry box
-    char *answer = (char *) gtk_entry_get_text(GTK_ENTRY(gui->inputTextBox));
+    char *answer = (char *) gtk_entry_get_text(GTK_ENTRY(gui->inputTextBox)); /** <Get answer from entry box.*/
 
-    // checks if right answer
-    if(strcmp(answer, gui->wordAndHints.word) != 0) { 
-        // show new hint if less than three so far or set to not waiting player anymore
-        if(numberOfHints < 3) {
+    if(strcmp(answer, gui->wordAndHints.word) != 0) { /** <Checks if right answer.*/
+        if(numberOfHints < 3) { /** <Show new hint if less than three so far or set to not waiting player anymore.*/
             updateHintLabel(&(gui->hintsLabel[numberOfHints]), gui->wordAndHints.hints[numberOfHints]);
         } else {
             gui->waitingForAnswer = FALSE;
         }
-        // if wrong increase number of hints used
-        gui->numberOfHints++;
-    // if correct set player to no more waitingand got correct answer
-    } else {
+        gui->numberOfHints++; /** <If wrong increase number of hints used.*/
+        
+    } else { /** <If correct set player to no more waiting and got correct answer.*/
         gui->waitingForAnswer = FALSE;
         gui->gotCorrectAnswer = TRUE;
     }
 
-    // empty entry box
     g_print ("Player sent value \"%s\"\n", (char *) gtk_entry_get_text(GTK_ENTRY(gui->inputTextBox)));
-    gtk_entry_set_text (GTK_ENTRY(gui->inputTextBox), "");
+    gtk_entry_set_text (GTK_ENTRY(gui->inputTextBox), ""); /** <Empty entry box.*/
 }
 
+/**
+ * Funtion void createTextBox
+ * Creates an input text box so player can make attempts to guess the word.
+ */
 void createTextBox(Interface *gui, GtkWidget *frame)
 {
-    // creates horizontal box to hold text box and enter button
-    GtkWidget *hbox;
+    GtkWidget *hbox; /** <Creates horizontal box to hold text box and enter button.*/
     hbox = gtk_hbox_new(FALSE, 0);
 
-    // creates input box and binds enter key (activate) to sendText function
-    gui->inputTextBox = gtk_entry_new();
+    gui->inputTextBox = gtk_entry_new(); /** <Creates input box and binds enter key (activate) to sendText function.*/
     gtk_entry_set_text (GTK_ENTRY (gui->inputTextBox), "");
     gtk_box_pack_start (GTK_BOX (hbox), gui->inputTextBox, TRUE, TRUE, 0);
     gtk_signal_connect(GTK_OBJECT(gui->inputTextBox), "activate", GTK_SIGNAL_FUNC(sendText), (gpointer) gui);
 
-    // creates enter button and binds click to sendText function
-    GtkWidget *button;
+    GtkWidget *button; /** <Creates enter button and binds click to sendText function.*/
     button = gtk_button_new_with_label("Enter");
     gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
     gtk_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(sendText), (gpointer) gui);
@@ -304,13 +340,15 @@ void createTextBox(Interface *gui, GtkWidget *frame)
     gtk_container_add(GTK_CONTAINER(frame), hbox);
 }
 
+/**
+ * Funtion void updateTimerLabel
+ * Updates the timer label so as a certain time has passed with the value 15-timePassed.
+ */
 void updateTimerLabel (GtkWidget **label, double timePassed) {
-    //calculates remaining time
-    char buf[50], *color;
+    char buf[50], *color; /** <Calculates remaining time.*/
     int remainingTime = 15-timePassed;
 
-    // if less than five seconds left print red, else blue
-    if(remainingTime <= 5) {
+    if(remainingTime <= 5) { /** <If less than five seconds left print red, else blue.*/
         color = "red";
     } else {
         color = "blue";
@@ -318,8 +356,7 @@ void updateTimerLabel (GtkWidget **label, double timePassed) {
 
     sprintf(buf, "<span foreground=\"%s\" font=\"25\">%d</span>", color, remainingTime);
 
-    // if time over and wrong answer print red, if right answer print OK! in green
-    if(remainingTime == 0) {
+    if(remainingTime == 0) { /** <If time over and wrong answer print red, if right answer print OK! in green.*/
         color = "red";
         sprintf(buf, "<span foreground=\"%s\" font=\"42.5\">%s</span>", color, "X");
     }
@@ -329,100 +366,116 @@ void updateTimerLabel (GtkWidget **label, double timePassed) {
         remainingTime = 0;
     }
 
-    // sets timer text
-    gtk_label_set_markup(GTK_LABEL(*label), buf);
+    gtk_label_set_markup(GTK_LABEL(*label), buf); /** <Sets timer text.*/
     gtk_widget_show(*label);
 }
 
+/**
+ * Funtion gboolean timerHandler
+ * Time out function that updates the timer every second while active.
+ */
 gboolean timerHandler(Interface *gui) {
-    // if application quit or stop time outs is on, return false to stop time out
-    if(quitApplication || stopTimeOuts[gui->player - 1] ) {
+    if(quitApplication || stopTimeOuts[gui->player - 1] ) { /** <If application quit or stop time outs is on, return false to stop time out.*/
         stopTimeOuts[gui->player - 1] = 0;
         return FALSE;
     }
 
-    // gets difference between current and start time
-    time_t now;
+    time_t now; /** <Gets difference between current and start time.*/
     double timePassed;
     now = time(NULL);
     timePassed = difftime(now, gui->startTime);
 
-    // if not waiting for answer anymore set time to 0 or (if answer was correct) -5
-    if(!gui->waitingForAnswer) {
+    if(!gui->waitingForAnswer) { /** <If not waiting for answer anymore set time to 0 or (if answer was correct) -5.*/
         timePassed = 15;
         if(gui->gotCorrectAnswer) {
             timePassed = 20;
         }
     }
 
-    // update timer
-    updateTimerLabel(&(gui->timerLabel), timePassed);
+    updateTimerLabel(&(gui->timerLabel), timePassed); /** <Update timer.*/
 
-    // if time over stop timeouts
-    if(timePassed >= 15) {
+    if(timePassed >= 15) { /** <If time over stop timeouts.*/
         gui->waitingForAnswer = FALSE;
         return FALSE;
     }
     return TRUE;
 }
 
+/**
+ * Funtion void startTimer
+ * Resets the timer to full time and starts it with timeouts every one second to update it.
+ */
 void startTimer(Interface *gui) {
-    // if stop time outs is on but there's no timeout running, set it to false
-    if(stopTimeOuts[gui->player - 1] ) {
+    if(stopTimeOuts[gui->player - 1] ) { /** <If stop time outs is on but there's no timeout running, set it to false.*/
         stopTimeOuts[gui->player - 1] = 0;
     }
-    // sets starting time to current
-    gui->startTime = time(NULL);
     
-    // starts timeout to update timer every second and updates timerLabel to full time
-    g_timeout_add(1000, (GSourceFunc) timerHandler, (gpointer) gui);
+    gui->startTime = time(NULL); /** <Sets starting time to current.*/
+    
+    g_timeout_add(1000, (GSourceFunc) timerHandler, (gpointer) gui); /** <Starts timeout to update timer every second and updates timerLabel to full time.*/
     updateTimerLabel(&(gui->timerLabel), 0);
 }
 
+/**
+ * Funtion void updateHintLabel
+ * Adds a new hint to a hint label in blue.
+ */
 void updateHintLabel (GtkWidget **label, char *newHint) {
-    // updates hint label in blue to new hint
-    char buf[50];
+    char buf[50]; /** <Updates hint label in blue to new hint.*/
     sprintf(buf, "<span foreground=\"blue\" font=\"20\">%s</span>", newHint);
 
     gtk_label_set_markup(GTK_LABEL(*label), buf);
 }
 
+/**
+ * Funtion void restartHints
+ * Erases old hints and shows new first hint for player.
+ */
 void restartHints (Interface *gui, wordAndHints newWordAndHint) {
-    // restarts player stats for hints
-    gui->waitingForAnswer = TRUE;
+    gui->waitingForAnswer = TRUE; /** <Restarts player stats for hints.*/
     gui->gotCorrectAnswer = FALSE;
     gui->wordAndHints = newWordAndHint;
     gui->numberOfHints = 1;
 
-    // updates first hint to new first and hides other two
-    updateHintLabel(&(gui->hintsLabel[0]), newWordAndHint.hints[0]);
+    updateHintLabel(&(gui->hintsLabel[0]), newWordAndHint.hints[0]); /** <Updates first hint to new first and hides other two.*/
     updateHintLabel(&(gui->hintsLabel[1]), "---");
     updateHintLabel(&(gui->hintsLabel[2]), "---");
 }
 
+/**
+ * Funtion integer newWord
+ * Starts a new turn for a player.
+ * Shows a new hint for the player in his game window, and grabs focus for his input text box.
+ * Also saves hints and the correct word.
+ */
 int newWord(int player, wordAndHints newWordAndHint) {
-    // brings player window to front and set focus to text entry box
-    gtk_widget_grab_focus(interfaces[player-1].inputTextBox);
+    gtk_widget_grab_focus(interfaces[player-1].inputTextBox); /**<Brings player window to front and set focus to text entry box.*/
     gtk_window_present (GTK_WINDOW(interfaces[player-1].window));
-    // restarts interface (hint, timer and entry box)
-    gtk_entry_set_text (GTK_ENTRY(interfaces[player-1].inputTextBox), "");
+    
+    gtk_entry_set_text (GTK_ENTRY(interfaces[player-1].inputTextBox), ""); /**<Restarts interface (hint, timer and entry box).*/
     restartHints(&interfaces[player-1], newWordAndHint); 
     startTimer(&interfaces[player-1]);
     restartHints(&interfaces[player-1], newWordAndHint); 
     startTimer(&interfaces[player-1]);
 }
 
+/**
+ * Funtion integer updateInterface
+ * Updates interface.
+ * Returns if any player closed their playing window. 
+ */
 int updateInterface(void) {
-    //while changes to do and application hasn't been closed update
-    while (!quitApplication && gtk_events_pending ()) {
+    while (!quitApplication && gtk_events_pending ()) { /**<While changes to do and application hasn't been closed update.*/
         gtk_main_iteration ();
     }
 
-    // return if application still working
-    return !quitApplication;
+    return !quitApplication; /** <Return if application still working*/
 }
 
-// returns true if any player still guessing
+/**
+ * Funtion integer waintingPlayer
+ * Returns true if any player still guessing.
+ */
 int waitingPlayer(void) {
     if(numberOfPlayers == 1) {
         if(interfaces[playerPlaying - 1].waitingForAnswer) {
@@ -439,7 +492,10 @@ int waitingPlayer(void) {
     return 0;
 }
 
-// -1 if no correct answer, number of used hints otherwise
+/**
+ * Function integer getPlayerScore
+ * Returns -1 if no correct answer, number of used hints otherwise.
+ */
 int getPlayerScore(int player) {
     if(interfaces[player-1].gotCorrectAnswer) {
         return interfaces[player-1].numberOfHints;
@@ -448,34 +504,32 @@ int getPlayerScore(int player) {
     }
 }
 
-// creates info window
+/**
+ * Function integer createInfoWindow
+ * Creates info window.
+ */
 int createInfoWindow(InfoInterface *infoGui) {
-    // initializes blank info window
-    initializeInfoWindow(&(infoGui->window));
-    // adds items to window
-    addItemsToInfoWindow(infoGui);
-    // shows everything in window
-    gtk_widget_show_all(infoGui->window);
+    initializeInfoWindow(&(infoGui->window)); /** <Initializes blank info window.*/
+    addItemsToInfoWindow(infoGui); /** <Adds items to window.*/
+    gtk_widget_show_all(infoGui->window); /** <Shows everything in window.*/
 }
 
-// initiate info window
+/**
+ * Function integer initializeInfoWindow
+ * Initializes info window.
+ */
 int initializeInfoWindow(GtkWidget **window) {
-    // initialize window
-    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL); /** <Initialize window.*/
 
-    // set title
-    char buf[50];
+    char buf[50]; /** <Set title.*/
     sprintf(buf, "megasenha - info window");
     gtk_window_set_title(GTK_WINDOW(*window), buf);
 
-    // set size and position and connects close window with destroy function
-    gtk_window_set_default_size(GTK_WINDOW(*window), 797, 107);
+    gtk_window_set_default_size(GTK_WINDOW(*window), 797, 107); /** <Set size and position and connects close window with destroy function.*/
     gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
     gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 797/2, gdk_screen_height()*1/20);
-//    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroy), (gpointer) "1");
 
-    // sets and creates icons for windows and tell windows manager not to put them together
-    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg"));
+    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg")); /** <Creates and sets icons for windows and tell windows manager not to put them together.*/
     gtk_window_set_wmclass(GTK_WINDOW (*window), "infoWindow", "megasenha"); 
 
     gtk_widget_show_all(*window);
@@ -483,60 +537,72 @@ int initializeInfoWindow(GtkWidget **window) {
     return 1;
 }
 
+/**
+ * Function void addItemsToInfoWindow
+ * Add items to info window (buttons, labels, etc..).
+ */
 void addItemsToInfoWindow(InfoInterface *gui) {
-    // creates horizontal box to hold everything
-    GtkWidget *parentHbox;
+    GtkWidget *parentHbox; /** Creates horizontal box to hold everything.*/
     parentHbox = gtk_hbox_new(FALSE, 0);
     gtk_container_add (GTK_CONTAINER (gui->window), parentHbox);
 
-    // adds timer, hints and input text boxes
-    addPlayer(&(gui->playerLabel), parentHbox);
+    addPlayer(&(gui->playerLabel), parentHbox); /** <Adds timer, hints and input text boxes.*/
     addInfoLabel(gui, parentHbox);
     addQuitButton(gui, parentHbox);
 }
 
+/**
+ * Function void quitGame
+ * Adds info label, which contains information strings to info window.
+ */
 void addInfoLabel(InfoInterface *gui, GtkWidget *parentVbox) {
 
-    //creates frame to hold hints
-    GtkWidget *frame;
+    GtkWidget *frame; /** <Creates frame to hold hints.*/
     frame = gtk_frame_new("Info");
     gtk_box_pack_start(GTK_BOX(parentVbox), frame, TRUE, TRUE, 0);
 
-    // writes "no info yet" in labels
-    gui->infoLabel = gtk_label_new ("No info yet");
+    gui->infoLabel = gtk_label_new ("No info yet"); /** <Writes "no info yet" in labels.*/
     gtk_container_add (GTK_CONTAINER (frame), gui->infoLabel);
 }
 
+/**
+ * Function void quitGame
+ * Adds player label, which contains info on currently playing player to info window.
+ */
 void addPlayer(GtkWidget **label, GtkWidget *parentHbox) {
-    // creates timer frame
-    GtkWidget *frame;
+    GtkWidget *frame; /** <Creates player who is playing frame.*/
     frame = gtk_frame_new("Player");
     gtk_widget_set_size_request (frame, 100, 100);
     gtk_box_pack_start(GTK_BOX(parentHbox), frame, FALSE, FALSE, 0);
 
-    // initializes it with word "Stopped"
-    *label = gtk_label_new ("None");
+    *label = gtk_label_new ("None"); /** <Initializes it with word "None".*/
     gtk_container_add (GTK_CONTAINER (frame), *label);
 }
 
-// adds input text box to window
+/**
+ * Function void addQuitButton
+ * Adds input text box to window.
+ */
 void addQuitButton(InfoInterface *gui, GtkWidget *parentHbox) {
-    //generates input box frame
-    GtkWidget *frame;
+    GtkWidget *frame; /** <Generates input box frame.*/
     frame = gtk_frame_new ("Surrender");
     gtk_box_pack_start (GTK_BOX (parentHbox), frame, FALSE, FALSE, 0);
 
-    // creates give up button
-    GtkWidget *button;
+    GtkWidget *button; /** <Creates give up button.*/
     button = gtk_button_new_with_label("Give up");
     gtk_container_add (GTK_CONTAINER (frame), button);
     gtk_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(quitGame), (gpointer) gui);
 }
 
+/**
+ * Function void quitGame
+ * Callback related to give up button in info window.
+ * If in second round and in give up time, sets player as given up.
+ * Else tell player he can't give up in first round or in middle of a round.
+ */
 void quitGame(GtkWidget *widget, gpointer data)
 {
-    // simplify notation
-    InfoInterface *gui = (InfoInterface *) data;
+    InfoInterface *gui = (InfoInterface *) data; /** <Simplify notation.*/
 
     if(waitingPlayer() || !playerPlaying) {
         if(!playerPlaying) {
@@ -549,59 +615,67 @@ void quitGame(GtkWidget *widget, gpointer data)
         return;
     }
 
-    // show that player gave up
-    updateInfoLabel("Player gave up!", "red");
+    updateInfoLabel("Player gave up!", "red"); /** <Show that player gave up.*/
     playerGaveUp = 1;
     g_print ("Player %d gave up\n", playerPlaying);
 }
 
+/**
+ * Function void updateInfoLabel
+ * Updates info label in info window with new string and color.
+ */
 void updateInfoLabel (char *newInfo, char *color) {
-    // updates hint label in blue to new hint
-    char buf[150];
+    char buf[150]; /** <Updates hint label in blue to new hint.*/
     sprintf(buf, "<span foreground=\"%s\" font=\"20\">%s</span>", color, newInfo);
 
     gtk_label_set_markup(GTK_LABEL(infoInterface.infoLabel), buf);
 }
 
+/**
+ * Function void updatePlayerLabel
+ * Updates player label in info window with player currently playing.
+ */
 void updatePlayerLabel (int newPlayer) {
-    // updates hint label in blue to new hint
-    char buf[50];
-    sprintf(buf, "<span foreground=\"green\" font=\"40\">%d</span>", newPlayer);
+    char buf[50]; /** <Updates player label in green to new player who is playing.*/
+    sprintf(buf, "<span  foreground=\"green\" font=\"40\">%d</span>", newPlayer);
 
     gtk_label_set_markup(GTK_LABEL(infoInterface.playerLabel), buf);
 }
 
+/**
+ * Function integer gaveUp
+ * Returns 1 if player gave up, 0 otherwise.
+ */
 int gaveUp() {
     return playerGaveUp;
 }
 
+/**
+ * Function void startGetNameInterface
+ * Creates, startsand shows get name window.
+ */
 void startGetNameInterface() {
-    // intializes blank window
-    initializeGetNameWindow(&(getNameInterface.window));
-    // adds items to window
-    addItemsToGetNameWindow(&getNameInterface);
-    // shows everything in window
-    gtk_widget_show_all(getNameInterface.window);
+    initializeGetNameWindow(&(getNameInterface.window)); /** <Intializes blank window.*/
+    addItemsToGetNameWindow(&getNameInterface); /** <Adds items to window.*/
+    gtk_widget_show_all(getNameInterface.window); /** <Shows everything in window.*/
 }
 
-// initiate get name window
+/**
+ * Function integer initializeGetNameWindow
+ * Initializes get name window.
+ */
 int initializeGetNameWindow(GtkWidget **window) {
-    // initialize window
-    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL); /**<Initialize window.*/
 
-    // set title
-    char buf[50];
+    char buf[50]; /** <Set title.*/
     sprintf(buf, "megasenha - type your name");
     gtk_window_set_title(GTK_WINDOW(*window), buf);
 
-    // set size and position and connects close window with destroy function
-    gtk_window_set_default_size(GTK_WINDOW(*window), 397, 107);
+    gtk_window_set_default_size(GTK_WINDOW(*window), 397, 107); /** <Set size and position and connects close window with destroy function.*/
     gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
     gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 397/2, gdk_screen_height()*9/20);
-//    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroy), (gpointer) "1");
 
-    // sets and creates icons for windows and tell windows manager not to put them together
-    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg"));
+    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg")); /** <Sets and creates icons for windows and tell windows manager not to put them together.*/
     gtk_window_set_wmclass(GTK_WINDOW (*window), "infoWindow", "megasenha"); 
 
     gtk_widget_show_all(*window);
@@ -609,46 +683,49 @@ int initializeGetNameWindow(GtkWidget **window) {
     return 1;
 }
 
+/**
+ * Function void addItemsToGetNameWindow
+ * Add items to get name window (buttons, input text box, etc..).
+ */
 void addItemsToGetNameWindow(GetNameInterface *gui) {
-    // creates horizontal box to hold everything
-    GtkWidget *parentHbox;
+    GtkWidget *parentHbox; /** <Creates horizontal box to hold everything.*/
     parentHbox = gtk_hbox_new(FALSE, 0);
     gtk_container_add (GTK_CONTAINER (gui->window), parentHbox);
 
-    // adds timer, hints and input text boxes
-    addGetNameTextBox(gui, parentHbox);
+    addGetNameTextBox(gui, parentHbox); /** <Adds input text box.*/
 }
 
-// adds input text box to get name window
+/**
+ * Function void addGetNameTextBox
+ * Adds input text box to get name window.
+ */
 void addGetNameTextBox(GetNameInterface *gui, GtkWidget *parentHbox) {
-    // generates vertical box that holds items
-    GtkWidget *vbox;
+    GtkWidget *vbox; /** <Generates vertical box that holds items.*/
     vbox = gtk_vbox_new(FALSE, 0);
     gtk_box_pack_start(GTK_BOX(parentHbox), vbox, FALSE, FALSE, 0);
 
-    //generates input box frame
-    GtkWidget *frame;
+    GtkWidget *frame; /** <Generates input box frame.*/
     frame = gtk_frame_new ("Write your name");
     gtk_box_pack_start (GTK_BOX (parentHbox), frame, TRUE, TRUE, 0);
 
-    //create input box
-    createGetNameTextBox(gui, frame);
+    createGetNameTextBox(gui, frame); /**<Create input box.*/
 }
 
+/**
+ * Function void createGetNameTextBox
+ * Creates an input text box to get a name from user.
+ */
 void createGetNameTextBox(GetNameInterface *gui, GtkWidget *frame)
 {
-    // creates horizontal box to hold text box and enter button
-    GtkWidget *hbox;
+    GtkWidget *hbox; /** <Creates horizontal box to hold text box and enter button.*/
     hbox = gtk_hbox_new(FALSE, 0);
 
-    // creates input box and binds enter key (activate) to sendText function
-    gui->inputTextBox = gtk_entry_new();
+    gui->inputTextBox = gtk_entry_new(); /** <Creates input box and binds enter key (activate) to sendText function.*/
     gtk_entry_set_text (GTK_ENTRY (gui->inputTextBox), "");
     gtk_box_pack_start (GTK_BOX (hbox), gui->inputTextBox, TRUE, TRUE, 0);
     gtk_signal_connect(GTK_OBJECT(gui->inputTextBox), "activate", GTK_SIGNAL_FUNC(sendName), (gpointer) gui);
 
-    // creates enter button and binds click to sendText function
-    GtkWidget *button;
+    GtkWidget *button; /** <Creates enter button and binds click to sendText function.*/
     button = gtk_button_new_with_label("Enter");
     gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
     gtk_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(sendName), (gpointer) gui);
@@ -656,28 +733,38 @@ void createGetNameTextBox(GetNameInterface *gui, GtkWidget *frame)
     gtk_container_add(GTK_CONTAINER(frame), hbox);
 }
 
+/**
+ * Function void sendName
+ * Callback function called from get name window when player has finished typing his name (presses enter or clicks the enter button in the get name window).
+ */
 void sendName(GtkWidget *widget, gpointer data)
 {
-    // simplify notation
-    GetNameInterface *gui = (GetNameInterface *) data;
+    GetNameInterface *gui = (GetNameInterface *) data; /** <Simplify notation.*/
     
-    // get name from entry box
-    gui->name = (char *) gtk_entry_get_text(GTK_ENTRY(gui->inputTextBox));
+    gui->name = (char *) gtk_entry_get_text(GTK_ENTRY(gui->inputTextBox)); /** <Get name from entry box.*/
 
-    // checks if right answer and if yes, sets player name as received
-    if(strcmp(gui->name, "") != 0) { 
+    if(strcmp(gui->name, "") != 0) { /** <Checks if name isn't empty.*/
         gui->gotName = 1;
     }
 
-    // print player name
-    g_print ("Player sent value \"%s\"\n", (char *) gtk_entry_get_text(GTK_ENTRY(gui->inputTextBox)));
+    g_print ("Player sent value \"%s\"\n", (char *) gtk_entry_get_text(GTK_ENTRY(gui->inputTextBox))); /** <Print player name.*/
 }
 
+/**
+ * Function char *getName
+ * Returns string with last name typed in get name window.
+ * If no name was typed, returns an invalid value.
+ */
 char *getName()
 {
     return getNameInterface.name;
 }
 
+/**
+ * Function integer updateGetName
+ * Updates the interface.
+ * Returns 1 if no name was typed in window, or 0 if a name was already gotten.
+ */
 int updateGetName()
 {
     if(getNameInterface.gotName)
@@ -687,36 +774,38 @@ int updateGetName()
     return 1;
 }
 
+/**
+ * Function void startMainInterface
+ * Starts the program main window, which gives three choices to user:
+ * - Play game;
+ * - View ranking;
+ * - Add new word.
+ */
 void startMainInterface(int argc, char *argv[]) {
-    //start gtk
-    gtk_init(&argc, &argv);
+    gtk_init(&argc, &argv); /**<Start gtk.*/
 
-    // intializes blank window
-    initializeMainWindow(&(mainInterface.window));
-    // adds items to window
-    addItemsMainWindow(&mainInterface);
-    // shows everything in window
-    gtk_widget_show_all(mainInterface.window);
+    initializeMainWindow(&(mainInterface.window));/** <Initializes blank window.*/
+    addItemsMainWindow(&mainInterface); /** <Adds items to window.*/
+    gtk_widget_show_all(mainInterface.window); /** <Shows everything in window.*/
 }
 
-// initiate get name window
+/**
+ * Function void initializeMainWindow
+ * Initializes main window.
+ */
 int initializeMainWindow(GtkWidget **window) {
-    // initialize window
-    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    *window = gtk_window_new(GTK_WINDOW_TOPLEVEL); /** <Initialize window.*/
 
-    // set title
-    char buf[150];
+    char buf[150]; /** <Set title.*/
     sprintf(buf, "megasenha - menu");
     gtk_window_set_title(GTK_WINDOW(*window), buf);
 
-    // set size and position and connects close window with destroy function
-    gtk_window_set_default_size(GTK_WINDOW(*window), 397, 107);
+    gtk_window_set_default_size(GTK_WINDOW(*window), 397, 107); /** <Set size and position and connects close window with destroy function.*/
     gtk_container_set_border_width (GTK_CONTAINER (*window), 10);
     gtk_window_move(GTK_WINDOW(*window), gdk_screen_width()/2 - 397/2, gdk_screen_height()*9/20);
-    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroyMainWindow), NULL);
+    gtk_signal_connect (GTK_OBJECT(*window), "destroy", GTK_SIGNAL_FUNC (destroyMainWindow), NULL); /** <Connects close window with destroyMainWindow function*/
 
-    // sets and creates icons for windows and tell windows manager not to put them together
-    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg"));
+    gtk_window_set_icon(GTK_WINDOW(*window), createPixbuf("info.jpg")); /** <Creates and sets icons for windows and tell windows manager not to put them together.*/
     gtk_window_set_wmclass(GTK_WINDOW (*window), "infoWindow", "megasenha"); 
 
     gtk_widget_show_all(*window);
@@ -799,6 +888,10 @@ int updateMainInterface()
     return mainInterface.choice;
 }
 
+/**
+ * Function void startRankingInterface
+ * Starts the ranking window, which gives the user names and points from 10 best pontuations ever gotten.
+ */
 void startRankingInterface(int argc, char *argv[]) {
     //start gtk
     gtk_init(&argc, &argv);
@@ -885,6 +978,14 @@ int updateRankingInterface()
     return !rankingWindowClosed;
 }
 
+/**
+ * Function void startAddWordInterface
+ * Starts the add word window, which gives the user 4 input text boxes and one scroll down selector item to set the new:
+ * - Word;
+ * - 3 hints;
+ * - Difficulty.
+ * To add to game.
+ */
 void startAddWordInterface() {
     // intializes blank window
     initializeAddWordWindow(&(addWordInterface.window));
@@ -1042,12 +1143,11 @@ int hasNewItemInAddWord() {
 wordAndHints getNewWordAndHints() {
     addWordInterface.newItem = 0;
 
-           printf("word2 = %s \n", (addWordInterface.newWordAndHints).word);
+        printf("word2 = %s \n", (addWordInterface.newWordAndHints).word);
         printf("diif = %c \n", (addWordInterface.newWordAndHints).dificulty);
         printf("dica = %s \n", (addWordInterface.newWordAndHints).hints[0]);
         printf("dica = %s \n", (addWordInterface.newWordAndHints).hints[1]);
         printf("dica = %s \n", (addWordInterface.newWordAndHints).hints[2]);
-
 
     return addWordInterface.newWordAndHints;
 }

@@ -1,3 +1,16 @@
+/**
+ * Interface to the armazenamento module.
+ * Declares functions public and private to the armazenamento module.
+/*
+ * @autor Douglas
+ * @autor Isabella
+ * @autor Thiago
+ * @autor Tiago
+ * @since 04/07/2014
+ * @version 2.0
+ *
+ */
+
 #ifndef INTERFACE_ARMAZENAMENTO_H
 #define INTERFACE_ARMAZENAMENTO_H
 #ifdef INTERFACE_ARMAZENAMENTO_SERVIDOR
@@ -11,12 +24,12 @@
 #include<string.h>
 #include<time.h>
 
-typedef struct ScoreStruct {
+typedef struct ScoreStruct {/** <struct that holds the values for the name and the score of the players.*/
     char *name;
     int score;
 } Score;
 
-typedef struct RankingStruct {
+typedef struct RankingStruct {/** <struct that contains the score and the number of players.*/
     Score *scores;
     int size; 
 } Ranking; 
@@ -39,7 +52,7 @@ Ranking readRanking();
 
 int getSizeOfRanking(FILE *fp);
 
-// declare functions intern to armazenamento module
+// declare functions only used in armazenamento module
 #ifdef ARMAZENAMENTO_OWN
     void writeWordAndHint(PWordsAndHints Pwords, int linesNum);
 
