@@ -1,10 +1,10 @@
-|Data| Horas Trabalhadas|Tipo Tarefa  |Descrição da Tarefa Realizada|
+|Data| Horas Trabalhadas|Tipo Tarefa  |DescriÃ§Ã£o da Tarefa Realizada|
 -------------------------------------------------------------------
-| 09/|       6h         | Estudar     |Estudar programação modular  |
+| 09/|       6h         | Estudar     |Estudar programaï¿½ï¿½o modular  |
 | 04 |                  |             |                             |
 -------------------------------------------------------------------
-| 22/|       1h         | Revisar     | Revisar especificações do   |
-| 04 |                  |especificação|trabalho 1                   |
+| 22/|       1h         | Revisar     | Revisar especificaï¿½ï¿½es do   |
+| 04 |                  |especificÃ£o  |trabalho 1                   |
 -------------------------------------------------------------------
 |25/ |       2h         |Projetar     | Projetar casos de testes    |
 | 04 |                  |             | pra gui                     |
@@ -14,4 +14,10 @@
 -------------------------------------------------------------------
 |27/ |                  |Redigir casos| Redigir casos de testes     |
 | 04 |                  |de testes    |                             |
+-------------------------------------------------------------------
+|04/ |      3h          |Estudar aulas| ComeÃ§ar a documentar o      |
+| 07 |                  |e laborÃ¡torios|cÃ³digo                      |
+-------------------------------------------------------------------
+|06/ |     8h           |Documentar via| Comentar o cÃ³digo          |
+| 07 |                  |Doxygen       |                            |
 -------------------------------------------------------------------
