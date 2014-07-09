@@ -1,17 +1,22 @@
-﻿|Data| Horas Trabalhadas|Tipo�Tarefa   |Descri��o�da�Tarefa�Realizada|
--------------------------------------------------------------------
-|     |  2 horas        |Estudo dos    |Estudo da Gui e do                             |
-|26-04|                 |demais modulos|modulo de armazenamento                             |
--------------------------------------------------------------------
-|     |    2 horas      |Especificar as|Analisei os requisitos                              |
-|26-04|                 |funcoes       |funcionais                |
--------------------------------------------------------------------
-|27-04|     8 horas      | Codificar modulo  | Inicio da implementacao                            |
-|     |                  | controle          | dos modulos         |
--------------------------------------------------------------------
-|     |                  |           |                             |
-|     |                  |           |                             |
--------------------------------------------------------------------
-|     |                  |           |                             |
-|     |                  |           |                             |
--------------------------------------------------------------------
+﻿|Data | Horas Trabalhadas|Tipo Tarefa        |Descricao da Tarefa Realizada   | -------------------------------------------------------------------------------
+|     |     2 horas      |Estudo dos         |Estudo da Gui e do              |
+|26-04|                  |demais modulos     |modulo de armazenamento         |
+-------------------------------------------------------------------------------
+|     |    2 horas       |Especificar as     |Analisei os requisitos          |
+|26-04|                  |funcoes            |funcionais                      |
+------------------------------------------------------------------------------|
+|27-04|     8 horas      | Codificar modulo  | Inicio da implementacao        |
+|     |                  | controle          | dos modulos                    |
+-------------------------------------------------------------------------------
+|03-07|      6 horas     | Estudar slides    | Estudo dos laboratorios cunit  | 
+|     |                  | de testes         | spint e gcov                   |
+-------------------------------------------------------------------------------
+|13-07|   3 horas        |Testes estaticos   | Uso do splint para teste       |
+|     |                  |                   | estatico                       |
+-------------------------------------------------------------------------------
+|13-07|   3 horas        |Testes dinamicos   | Projetar casos de teste e      |
+|     |                  |                   | executar-los                   |
+-------------------------------------------------------------------------------
+|09-07|   2 horas        |Testes estaticos   | Uso do gvoc para checar a      |
+|     |                  |                   | cobertura dos testes           |
+-------------------------------------------------------------------------------
