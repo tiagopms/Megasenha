@@ -1,10 +1,10 @@
 /**Interface to the gui module.
  * Declares functions public and private to the gui module.
 /*
- * @autor Douglas
- * @autor Isabella
- * @autor Thiago
- * @autor Tiago
+ * @author Douglas
+ * @author Isabella
+ * @author Thiago
+ * @author Tiago
  * @since 04/07/2014
  * @version 2.0
  *
@@ -29,7 +29,6 @@ GUI_EXTERN void closeInterface();/**<function closes open windows.*/
 
 GUI_EXTERN int updateInterface(void);/**<Returns a boolean that says if game wasn't closed, this function should be called constantly in a loop to allow the GUI to be updated.*/
 
-/
 int newWord(int player, wordAndHints newWordAndHint);/**<Starts new round for player with new word and hints.*/
 
 GUI_EXTERN int waitingPlayer(void);/**<Retunrs a boolean that says if there's a player still guessing.*/
