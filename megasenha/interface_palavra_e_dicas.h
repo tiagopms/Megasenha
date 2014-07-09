@@ -1,6 +1,5 @@
-/**
- * Creates a struct used to stores a word, its hints and its dificulty.
- *
+/**Creates a struct used to stores a word, its hints and its dificulty.
+/*
  * @autor Douglas
  * @autor Isabella
  * @autor Thiago
@@ -24,4 +23,4 @@ typedef struct wordAndHintsStruct { /** <Struct used to stores a word, its hints
     /*@reldef@*/ char dificulty;
 } wordAndHints;
 
-#endif // WORDANDHINTS_HPP
+#endif /**<WORDANDHINTS_HPP.*/
