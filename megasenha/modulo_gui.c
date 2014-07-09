@@ -4,7 +4,7 @@
  * 
  * Library used for creating windows is gtk-2.0/gtk/gtk.h
  * Calls "interface_palavra_e_dica.h"
-/*
+ *
  * 
  * @author Douglas
  * @author Isabella

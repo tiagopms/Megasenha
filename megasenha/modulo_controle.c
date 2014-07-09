@@ -1,7 +1,7 @@
 /**Controls the game.
  * Implements all the functions to control the game (first or second round).
  * Also controls the mode of the program being used (play game, view ranking, or add new word to "database").
-/* 
+ * 
  *
  * @author Douglas
  * @author Isabella

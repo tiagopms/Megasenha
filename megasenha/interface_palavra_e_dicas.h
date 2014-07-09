@@ -1,5 +1,5 @@
 /**Creates a struct used to stores a word, its hints and its dificulty.
-/*
+ *
  * @author Douglas
  * @author Isabella
  * @author Thiago

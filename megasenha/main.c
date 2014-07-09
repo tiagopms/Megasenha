@@ -1,6 +1,6 @@
 /**Calls "interface_palavra_e_dica.h","interface_gui.h" and "interface_controe.h"
  * Main that shows the option select from the menu and the winner player.
-/* 
+ * 
  * @author Douglas
  * @author Isabella
  * @author Thiago

@@ -1,6 +1,6 @@
 /**Interface to the gui module.
  * Declares functions public and private to the gui module.
-/*
+ *
  * @author Douglas
  * @author Isabella
  * @author Thiago
