@@ -62,3 +62,10 @@
 |       |                  |            |novas informacoes.  Documentei o   |
 |       |                  |            |modulo de controle e as interfaces |
 -----------------------------------------------------------------------------
+|09/07  |     3:00         |Realizar    |Utilizei o splint para realizar uma|
+|       |                  |analise     |analise estatica dos modulos e     |
+|       |                  |de codigo   |corrigi todos os problemas         |
+|       |                  |utilizando  |encontrados.                       |
+|       |                  |testes      |                                   |
+|       |                  |estaticos   |                                   |
+-----------------------------------------------------------------------------

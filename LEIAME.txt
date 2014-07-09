@@ -3,3 +3,10 @@ Instalando por terminal: $ sudo apt-get install libgtk2.0-dev
 Na compilação de testes é necessário ter instalo a biblioteca CUnit.
 Para compilar basta utilizar o makefile presente
 terminal: $ make
+
+Para rodar os testes estáticos precisa-se instalar o splint
+$ sudo apt-get install splint
+E rodar o comando no makefile
+$ make splint
+Devido a presença da biblioteca gtk ser chamada em alguns dos módulos deve-se rodar os testes estáticos assim.
+(O splint não conseguia reconhecer o gtk, entao varias partes do modulo_gui tiveram de ser ignoradas pelo splint)

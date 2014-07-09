@@ -26,8 +26,8 @@
 #include "interface_palavra_e_dicas.h"
 
 typedef struct ScoreStruct {/** <struct that holds the values for the name and the score of the players.*/
-    char *name;
-    int score;
+    /*@reldef@*/ char *name;
+    /*@reldef@*/ int score;
 } Score;
 
 typedef struct RankingStruct {/** <struct that contains the score and the number of players.*/
@@ -45,7 +45,7 @@ void getWordSecondRoundHard(FILE*arquivo, wordAndHints *newWordAndHint);
 
 int countLines();
 
-void insertNewWord(wordAndHints *newWordAndHint);
+void insertNewWord(wordAndHints newWordAndHint);
 
 void ranking (int recorde, char *name);
 

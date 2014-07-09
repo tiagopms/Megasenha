@@ -34,7 +34,7 @@ char *RANKING_FILE = "ranking.txt";/**<variable that holds the name of the file 
  * Function void getWordFirstRound
  * Function to randomly select words for the first part of the game.
 */
-void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
+void getWordFirstRound(FILE *file, /*@out@*/ wordAndHints *newWordAndHint){
     static alreadyRandom = 0;
     int i, j, counter=0;
     char temporaria[BUFSIZ];
@@ -50,7 +50,7 @@ void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
     j=rand()%i;
 
     for(counter=1;counter<j;counter++){
-        fgets(temporaria, (int) BUFSIZ, file);
+        (void) fgets(temporaria, (int) BUFSIZ, file);
     }
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
     newWordAndHint->hints[0] = (char*) malloc(50*sizeof(char));
@@ -86,7 +86,7 @@ void getWordFirstRound(FILE*file, wordAndHints *newWordAndHint){
  * Function void getWordSeconfRoundEasy
  * Function to randomly select words for the easy round of the  second part of the game.
 */
-void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
+void getWordSecondRoundEasy(FILE *file, /*@out@*/ wordAndHints *newWordAndHint){
 
     int i=0, j, counter=0;
     char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
@@ -109,7 +109,7 @@ void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
     rewind(file);
     j=rand()%i;
     for(counter=1;counter<j;counter++){
-        fgets(temporaria, (int) BUFSIZ, file);
+        (void) fgets(temporaria, (int) BUFSIZ, file);
     }
                      
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
@@ -130,7 +130,7 @@ void getWordSecondRoundEasy(FILE*file, wordAndHints *newWordAndHint){
  * Function void getWordSeconfRoundMedium
  * Function to randomly select words for the medium round of the  second part of the game. 
 */
-void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
+void getWordSecondRoundMedium(FILE *file, /*@out@*/ wordAndHints *newWordAndHint){
 
     int i=0, k=0, j, counter=0;
     char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
@@ -158,10 +158,10 @@ void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
     j=rand()%i;
 
     for(counter=1;counter<k;counter++){
-        fgets(temporaria, (int) BUFSIZ, file);
+        (void) fgets(temporaria, (int) BUFSIZ, file);
     }
     for(counter=1;counter<j;counter++){
-        fgets(temporaria, (int) BUFSIZ, file);
+        (void) fgets(temporaria, (int) BUFSIZ, file);
     }
                      
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
@@ -181,7 +181,7 @@ void getWordSecondRoundMedium(FILE*file, wordAndHints *newWordAndHint){
  * Function void getWordSeconfRoundHard
  * Function to randomly select words for the hard round of the  second part of the game. 
 */
-void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
+void getWordSecondRoundHard(FILE *file, /*@out@*/ wordAndHints *newWordAndHint){
 
     int i=0, k=0, l=0, j, counter=0;
     char dificulty_temp[1], temporaria[60], word_temp[15], Hint1[15], Hint2[15], Hint3[15];
@@ -215,14 +215,14 @@ void getWordSecondRoundHard(FILE*file, wordAndHints *newWordAndHint){
     j=rand()%i;
 
     for(counter=1;counter<=l;counter++){
-        fgets(temporaria, (int) BUFSIZ, file);
+        (void) fgets(temporaria, (int) BUFSIZ, file);
     }
 
     for(counter=1;counter<=k;counter++){
-        fgets(temporaria, (int) BUFSIZ, file);
+        (void) fgets(temporaria, (int) BUFSIZ, file);
     }
     for(counter=1;counter<j;counter++){
-        fgets(temporaria, (int) BUFSIZ, file);
+        (void) fgets(temporaria, (int) BUFSIZ, file);
     }
    
     newWordAndHint->word = (char*) malloc(50*sizeof(char));
@@ -270,7 +270,7 @@ int countLines()
  * Function void insertNewWord
  * Function that inserts a new word (with its hints and difficulty) in the corret position in the file, so this word might be picked in future games
 */
-void insertNewWord(wordAndHints *newWordAndHint){
+void insertNewWord(wordAndHints newWordAndHint){
     int i, j, k;
     int medium, hard;
     FILE *file;
@@ -314,19 +314,19 @@ void insertNewWord(wordAndHints *newWordAndHint){
     fclose(file);
 
     /**< If new word has dificulty easy, puts it in its correct place and writes all words back to file.*/
-    if( newWordAndHint->dificulty=='f') {  
+    if( newWordAndHint.dificulty=='f') {  
         for ( k = j - 1 ; k >= 0 ; k-- ) {
             *(Pwords.words + k + 1) = *(Pwords.words + k);
         }
 
-        *(Pwords.words) = *newWordAndHint;
+        *(Pwords.words) = newWordAndHint;
 
         writeWordAndHint(Pwords, linesNum);   
         return;
     }
 
     /**< If new word has dificulty medium, puts it in its correct place and writes all words back to file.*/
-    if(newWordAndHint->dificulty == 'm'){
+    if(newWordAndHint.dificulty == 'm'){
 
         for ( k = j - 1 ; k >= ( j - medium - hard ) ; k-- ) {
             *(Pwords.words + k + 1) = *(Pwords.words + k);
@@ -334,21 +334,21 @@ void insertNewWord(wordAndHints *newWordAndHint){
 
         i = ( j - medium - hard );
 
-        *(Pwords.words + i) = *newWordAndHint;
+        *(Pwords.words + i) = newWordAndHint;
 
         writeWordAndHint(Pwords, linesNum);   
         return;
     }   
 
     /**< If new word has dificulty hard, puts it in its correct place and writes all words back to file.*/
-    if ( newWordAndHint->dificulty == 'd' ){
+    if ( newWordAndHint.dificulty == 'd' ){
 
         for ( k = j - 1 ; k >= ( j - hard ) ; k-- ) {
             *(Pwords.words + k + 1) = *(Pwords.words + k);
         }
         i = ( j - hard );
 
-        *(Pwords.words + i) = *newWordAndHint;
+        *(Pwords.words + i) = newWordAndHint;
 
         writeWordAndHint(Pwords, linesNum);
         return;
@@ -446,7 +446,7 @@ int getSizeOfRanking(FILE *fp) {
     }
     
     while(!feof(fp)) {
-        fread(&c, sizeof(char), 1, fp);
+        (void) fread(&c, sizeof(char), 1, fp);
         if(c == '\n') {
             size++;
         }

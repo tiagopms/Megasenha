@@ -289,7 +289,7 @@ void startAddWordWindow() {
     while(updateAddWordInterface()) { /**<Waits until player closes window, updating it.*/
         if(hasNewItemInAddWord()) { /**<If player added a word, get it and add it to file.*/
             newItem = getNewWordAndHints();
-            insertNewWord(&newItem);
+            insertNewWord(newItem);
         }
     }
 }
