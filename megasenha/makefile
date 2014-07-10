@@ -34,3 +34,8 @@ testes: teste_armazenamento.c
 testes2: teste_controle.c
 	gcc teste_controle.c -lcunit $(CFLAGS)  -o testes2 
 	./testes2
+
+gcov :	modulo_armazenamento.c interface_armazenamento.h  teste_armazenamento.c
+	gcc -Wall -ftest-coverage -fprofile-arcs -I./CUnit -L./CUnit teste_armazenamento.c -lcunit -o teste_gcov
+	./teste_gcov
+	gcov teste_armazenamento.c
