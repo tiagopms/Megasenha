@@ -1,12 +1,19 @@
-Para compilar a GUI é necessária ter instalado biblioteca GTK.
+Para compilar a GUI ï¿½ necessï¿½ria ter instalado biblioteca GTK.
 Instalando por terminal: $ sudo apt-get install libgtk2.0-dev
-Na compilação de testes é necessário ter instalo a biblioteca CUnit.
+Na compilaï¿½ï¿½o de testes ï¿½ necessï¿½rio ter instalo a biblioteca CUnit.
 Para compilar basta utilizar o makefile presente
 terminal: $ make
 
-Para rodar os testes estáticos precisa-se instalar o splint
+Para rodar os testes estï¿½ticos precisa-se instalar o splint
 $ sudo apt-get install splint
 E rodar o comando no makefile
 $ make splint
-Devido a presença da biblioteca gtk ser chamada em alguns dos módulos deve-se rodar os testes estáticos assim.
-(O splint não conseguia reconhecer o gtk, entao varias partes do modulo_gui tiveram de ser ignoradas pelo splint)
+Devido a presenï¿½a da biblioteca gtk ser chamada em alguns dos mï¿½dulos deve-se rodar os testes estï¿½ticos assim.
+(O splint nï¿½o conseguia reconhecer o gtk, entao varias partes do modulo_gui tiveram de ser ignoradas pelo splint)
+
+Para rodar os testes dinÃ¢micos basta digitar o comando 
+make testes
+isso farÃ¡ com que os testes executem.
+Para ver as estatÃ­sticas do gcov, basta utlizar o comando 
+make gcov.
+A presenca da biblioteca do gtk impossibilitou a realizacao de testes dinamicos nos modulos gui e controle.
