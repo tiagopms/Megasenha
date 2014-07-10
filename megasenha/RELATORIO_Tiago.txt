@@ -69,3 +69,7 @@
 |       |                  |testes      |                                   |
 |       |                  |estaticos   |                                   |
 -----------------------------------------------------------------------------
+|09/07  |     1:00         |Documentar  |Gerei a documentacao final em Doxy-|
+|       |                  |via         |gen e os arquivos html e pdf dessa |
+|       |                  |Doxygen     |documentacao.                      |
+-----------------------------------------------------------------------------
